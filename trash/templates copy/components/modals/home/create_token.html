@@ -1,0 +1,215 @@
+{% import "components/macros/modal.html" as modal %}
+{% import "components/macros/forms.html" as forms %}
+{% import "components/macros/fields.html" as fields %}
+{% import "components/macros/buttons.html" as buttons %}
+
+{% set body %}
+<div x-data="tokenCreate('{{ token_type }}')"
+     class="relative">
+    
+    <div x-show="!showProgress && !showResult" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100">
+        {% call forms.form(action="#", method="post", class_extra="space-y-4",
+            attrs={"@submit.prevent": "submit"}) %}
+            
+            {{ fields.input(
+                name="name",
+                label="Название",
+                placeholder="Токен 1",
+                required=true,
+                attrs={"x-model": "formData.name"}
+            ) }}
+
+            {{ fields.input(
+                name="email",
+                type="email",
+                label="Почта",
+                placeholder="user@example.com",
+                required=true,
+                attrs={"x-model": "formData.email"}
+            ) }}
+            
+            {{ fields.textarea(
+                name="description",
+                label="Описание",
+                placeholder="Для чего этот токен / где будет размещён",
+                rows=3,
+                attrs={"x-model": "formData.description"}
+            ) }}
+            
+            {% if token_type == "link" %}
+            
+            <div class="flex items-center">
+                <input type="checkbox" 
+                       id="enable-redirect" 
+                       x-model="enableRedirect"
+                       class="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2">
+                <label for="enable-redirect" class="ml-2 text-sm text-gray-300">
+                    Использовать редирект
+                </label>
+            </div>
+            
+            <div x-show="enableRedirect" 
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0 transform scale-95"
+                 x-transition:enter-end="opacity-100 transform scale-100">
+                {{ fields.input(
+                    name="redirect_url",
+                    type="url",
+                    label="Куда редиректить",
+                    placeholder="https://example.com",
+                    attrs={"x-model": "formData.redirectUrl"}
+                ) }}
+            </div>
+
+            {% elif token_type == "file" %}
+                {{ fields.input(
+                    name="qr_data",
+                    type="text",
+                    label="Данные для QR-кода",
+                    placeholder="Текст или ссылка для QR-кода",
+                    attrs={"x-model": "formData.qrData"}
+                ) }}
+                
+                {{ fields.select(
+                    name="qr_size",
+                    label="Размер QR-кода",
+                    options={
+                        "small": "Маленький",
+                        "medium": "Средний",
+                        "large": "Большой"
+                    },
+                    attrs={"x-model": "formData.qrSize"}
+                ) }}
+            {% endif %}
+            
+            {{ buttons.button(
+                text="Создать",
+                variant="hero",
+                size="md",
+                button_type="submit",
+                class_extra="w-full",
+                attrs={":disabled": "showProgress"}
+            ) }}
+            
+            <p class="text-xs text-gray-500">
+                Тип: <span class="text-gray-300">{{ token_type }}</span>
+            </p>
+        {% endcall %}
+    </div>
+    
+    <div x-show="showProgress" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         class="py-8">
+        
+        <div class="mb-4 text-center">
+            <h3 class="text-lg font-medium text-white">Создание токена</h3>
+            <p class="text-sm text-gray-400">Пожалуйста, подождите...</p>
+        </div>
+        
+        <!-- Прогресс-бар -->
+        <div class="relative pt-1">
+            <div class="flex items-center justify-between mb-2">
+                <div class="text-right">
+                    <span class="inline-block text-xs font-semibold text-blue-600" x-text="progress + '%'"></span>
+                </div>
+            </div>
+            <div class="flex h-2 mb-4 overflow-hidden text-xs bg-gray-700 rounded-full">
+                <div :style="'width: ' + progress + '%'"
+                     class="flex flex-col justify-center text-center text-white transition-all duration-300 ease-out bg-blue-500 shadow-none whitespace-nowrap"
+                     x-bind:class="{
+                         'bg-blue-500': progress < 90,
+                         'bg-green-500': progress >= 90
+                     }">
+                </div>
+            </div>
+            
+            <!-- Анимированные точки -->
+            <div class="flex justify-center mt-4 space-x-1">
+                <template x-for="i in 3" :key="i">
+                    <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"
+                         :style="'animation-delay: ' + (i * 200) + 'ms'"></div>
+                </template>
+            </div>
+        </div>
+    </div>
+    
+    <!-- РЕЗУЛЬТАТ (виден после завершения) -->
+    <div x-show="showResult && resultData" 
+         x-transition:enter="transition ease-out duration-500"
+         x-transition:enter-start="opacity-0 translate-y-4"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         class="space-y-4">
+        
+        <!-- Успешный заголовок -->
+        <div class="text-center">
+            <div class="inline-flex items-center justify-center w-12 h-12 mb-3 border border-green-500 rounded-full bg-green-900/30">
+                <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            <h3 class="text-lg font-medium text-white">Токен успешно создан!</h3>
+        </div>
+        
+        <!-- Информация о токене -->
+        <div class="space-y-3">
+            
+            <!-- Токен с кнопкой копирования -->
+            <div class="p-3 bg-gray-900 border border-gray-700 rounded-lg">
+              <!-- div class="mb-2 text-xs text-gray-500">Токен</div -->
+                <div class="mb-2 text-xs text-gray-500">
+                  <span class="text-gray-400">Почта:</span> <span x-text="resultData.email || '—'"></span>
+                </div>
+                <div class="pb-2 text-xs text-gray-500" x-show="resultData.description && resultData.description.trim() !== ''">
+                    <span class="text-gray-400">Описание:</span> <span x-text="resultData.description"></span>
+                </div>
+                <div class="mb-2 text-xs text-gray-500 border-b"></div>
+                <div class="mb-2 text-xs text-gray-500">
+                  <span class="text-gray-400">Тип:</span> <span x-text="resultData.tokenType || '—'"></span>
+                </div>
+                <div class="mb-2 text-xs text-gray-500" x-show="resultData.redirectUrl && resultData.redirectUrl.trim() !== ''">
+                  <span class="text-gray-400">URL:</span> <span x-text="resultData.redirectUrl"></span>
+                </div>
+                <div class="pb-2 mb-2 text-xs text-gray-500">
+                  <span class="text-gray-400">ID:</span> <span x-text="resultData.tokenId || '—'"></span>
+                </div>                                
+                <div class="flex items-center gap-2">
+                    <input type="text"
+                          id="token-input"
+                          readonly
+                          :value="resultData.triggerUrl"
+                          class="flex-1 px-3 py-2 font-mono text-sm text-white bg-gray-800 border border-gray-700 rounded-lg">
+                    {{ buttons.copy_button(
+                        target_id="token-input",
+                        size="sm",
+                        attrs={}
+                    ) }}
+                </div>
+              </div>
+        </div>
+        
+        <!-- Кнопки действий -->
+        <div class="flex gap-2 pt-2">
+          
+            <button @click="resetAll"
+                    type="button"
+                    class="flex-1 px-4 py-2 text-sm font-medium text-gray-300 transition-colors bg-gray-800 border border-gray-700 rounded-lg hover:bg-gray-700">
+                Создать ещё
+            </button>
+            
+            <button @click="resetAll"
+                    type="button"
+                    data-modal-hide="{{ modal_id }}" 
+                    class="flex-1 px-4 py-2 text-sm font-medium text-white transition-colors bg-blue-600 rounded-lg hover:bg-blue-700">
+                Готово
+            </button>
+            
+        </div>
+    </div>
+{% endset %}
+
+{{ modal.default_modal(modal_id, title, body, size="md") }}

@@ -1,0 +1,76 @@
+<details class="overflow-hidden border shadow-lg border-gray-700/50 rounded-2xl bg-gradient-to-br from-gray-800/40 to-gray-900/60 backdrop-blur-sm"
+         :open="showAllHeaders">
+  <summary class="flex items-center justify-between px-4 py-3 list-none transition-colors cursor-pointer bg-gray-900/30 hover:bg-gray-800/30">
+    <div class="flex items-center gap-2">
+      <div class="flex items-center justify-center border rounded-lg w-7 h-7 bg-blue-500/10 border-blue-500/20">
+        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path>
+        </svg>
+      </div>
+      <div>
+        <span class="text-xs font-medium tracking-wider text-gray-400 uppercase">Все заголовки</span>
+        <span class="ml-2 text-xs text-gray-500"
+              x-text="'(' + Object.keys(selectedEvent.current_headers || {}).length + ')'"></span>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <template x-if="selectedEvent.current_headers && Object.keys(selectedEvent.current_headers).length > 0">
+        <button type="button"
+                class="flex items-center gap-1 px-2 py-1 text-xs text-gray-300 transition border rounded-md bg-gray-800/50 border-gray-700/30 hover:bg-gray-700/60 hover:text-white"
+                @click.stop="copyHeaders(selectedEvent.current_headers)">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+          </svg>
+          <span>Копировать все</span>
+        </button>
+      </template>
+      {{ icons.chevron_indicator('down') }}
+    </div>
+  </summary>
+
+  <div class="p-4 border-t border-gray-700/50">
+    <template x-if="!selectedEvent.current_headers || Object.keys(selectedEvent.current_headers).length === 0">
+      <div class="flex flex-col items-center justify-center py-8 text-center">
+        <div class="flex items-center justify-center w-12 h-12 mb-3 text-xl border border-gray-800 rounded-full bg-gray-900/60">
+          📭
+        </div>
+        <div class="text-sm text-gray-400">Нет заголовков</div>
+        <div class="mt-1 text-xs text-gray-600">Заголовки запроса отсутствуют</div>
+      </div>
+    </template>
+
+    <template x-if="selectedEvent.current_headers && Object.keys(selectedEvent.current_headers).length > 0">
+      <div class="grid grid-cols-1 gap-2">
+        <template x-for="(value, key) in selectedEvent.current_headers" :key="key">
+          <div class="relative overflow-hidden transition-all duration-200 border rounded-lg group border-gray-700/50 bg-gradient-to-br from-gray-800/40 to-gray-900/60 hover:border-gray-600">
+            
+            {# Декоративная полоса слева #}
+            <div class="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-500/50 to-purple-500/50 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            
+            <div class="flex flex-col p-3">
+              <div class="flex items-center justify-between mb-1.5">
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-xs font-medium tracking-wider uppercase text-blue-400/90" 
+                        x-text="key"></span>
+                  <span class="text-[10px] text-gray-600">•</span>
+                  <span class="text-[10px] text-gray-600" 
+                        x-text="value.length + ' байт'"></span>
+                </div>
+                <button type="button"
+                        class="p-1 transition-opacity rounded opacity-0 group-hover:opacity-100 hover:bg-gray-700"
+                        @click="copy(key + ': ' + value)">
+                  <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                  </svg>
+                </button>
+              </div>
+              <div class="pl-2 font-mono text-sm text-gray-200 break-all transition-colors border-l-2 border-gray-700 group-hover:border-gray-600"
+                  x-text="value"></div>
+            </div>
+            
+          </div>
+        </template>
+      </div>
+    </template>
+  </div>
+</details>

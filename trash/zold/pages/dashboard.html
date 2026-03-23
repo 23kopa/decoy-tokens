@@ -1,0 +1,70 @@
+{% extends "layouts/private.html" %}
+{% import "components/macros/icons.html" as icons %}
+
+{% block title %}Дашборд{% endblock %}
+
+{% block private_body %}
+<div class="flex flex-col flex-1 min-h-0">
+
+  {# PAGE HEADER #}
+  <div class="pb-4 mb-6 border-b border-gray-800">
+
+    <h1 class="text-3xl font-bold text-white sm:text-4xl">Дашборд</h1>
+    <p class="mt-2 text-gray-400">
+      Сводка по токенам, событиям и активности за последние 7 дней.
+    </p>
+    
+  </div>
+
+  {# KPI CARDS #}
+  <section class="grid grid-cols-1 gap-3 p-4 mb-4 bg-gray-800 sm:grid-cols-2 lg:grid-cols-4 rounded-xl">
+
+    <div class="p-4 bg-gray-700 shadow-xl rounded-xl">
+      <div class="text-xs text-gray-400">Всего токенов</div>
+      <div class="mt-2 text-2xl font-bold text-white">
+        {{ total_tokens or 0 }}
+      </div>
+      <div class="mt-1 text-xs text-gray-500">в системе</div>
+    </div>
+
+    <div class="p-4 bg-gray-700 shadow-xl rounded-xl">
+      <div class="text-xs text-gray-400">Событий (24ч)</div>
+      <div class="mt-2 text-2xl font-bold text-white">
+        {{ events_24h or 0 }}
+      </div>
+      <div class="mt-1 text-xs text-gray-500">все типы</div>
+    </div>
+
+    <div class="p-4 bg-gray-700 shadow-xl rounded-xl">
+      <div class="text-xs text-gray-400">Уникальных отпечатков</div>
+      <div class="mt-2 text-2xl font-bold text-white">
+        {{ unique_fingerprints or 0 }}
+      </div>
+      <div class="mt-1 text-xs text-gray-500">Fingerprints</div>
+    </div>
+
+    <div class="p-4 bg-gray-700 shadow-xl rounded-xl">
+      <div class="text-xs text-gray-400">Уникальных IP</div>
+      <div class="mt-2 text-2xl font-bold text-white">
+        {{ unique_ips or 0 }}
+      </div>
+      <div class="mt-1 text-xs text-gray-500">IP / UA / client</div>
+    </div>
+
+  </section>
+
+  {# MAIN CONTENT #}
+  <section class="flex flex-col flex-1 min-h-0 p-4 bg-gray-800 rounded-xl">
+
+    <div class="grid flex-1 min-h-0 grid-cols-1 gap-4 lg:grid-cols-2">
+        {% include "components/pages/dashboard/tokens_list.html" %}
+        {% include "components/pages/dashboard/activity_chart.html" %}
+    </div>
+
+  </section>
+  
+{% endblock %}
+
+{% block private_overlays %}
+{% include "components/modals/dashboard/token_events.html" %}
+{% endblock %}

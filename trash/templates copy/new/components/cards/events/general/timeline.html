@@ -1,0 +1,23 @@
+<div class="flex flex-col h-full p-4 border shadow-lg border-gray-700/50 rounded-2xl bg-gradient-to-br from-gray-800/40 to-gray-900/60 backdrop-blur-sm">
+  <div class="flex items-center gap-2 mb-3">
+    <div class="flex items-center justify-center border rounded-lg text-amber-400 w-7 h-7 bg-amber-500/10 border-amber-500/20">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+    </div>
+    <div class="text-xs font-medium tracking-wider text-gray-400 uppercase">Временная линия</div>
+  </div>
+
+  {# Первое появление #}
+  <div class="mb-2">
+    <div class="text-xs text-gray-500 mb-0.5">Первое</div>
+    <div class="font-mono text-sm text-white" x-text="formatDate(selectedEvent?.first_seen)"></div>
+  </div>
+
+
+  {# Последнее появление #}
+  <div class="pt-3 mb-3 border-t border-gray-700/50">
+    <div class="text-xs text-gray-500 mb-0.5">Последнее</div>
+    <div class="font-mono text-sm text-white" x-text="formatDate(selectedEvent?.last_seen)"></div>
+  </div>
+</div>

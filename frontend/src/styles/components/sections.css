@@ -1,0 +1,24 @@
+@layer components {
+  .section-base {
+    background-image: var(--section-bg);
+    border: var(--section-border);
+    box-shadow: var(--section-shadow);
+    border-radius: 1.5rem;
+    @apply p-5;
+  }
+
+  .section-modal {
+    background-image: var(--section-bg);
+    border: var(--section-border);
+    box-shadow: var(--section-shadow);
+    border-radius: 1.5rem;
+    @apply p-4;
+  }
+
+  .section-modal-secondary {
+    background-image: var(--section-bg);
+
+    box-shadow: var(--section-shadow);
+    @apply p-4;
+  }
+}

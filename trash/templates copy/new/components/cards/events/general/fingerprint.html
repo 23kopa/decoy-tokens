@@ -1,0 +1,35 @@
+<div class="col-span-2 p-4 border shadow-lg border-gray-700/50 rounded-2xl bg-gradient-to-br from-gray-800/40 to-gray-900/60 backdrop-blur-sm">
+  <div class="flex items-center gap-2 mb-3">
+    <div class="flex items-center justify-center text-pink-400 border rounded-lg w-7 h-7 bg-pink-500/10 border-pink-500/20">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"></path>
+      </svg>
+    </div>
+    <div class="text-xs font-medium tracking-wider text-gray-400 uppercase">Fingerprint ID</div>
+  </div>
+
+  {# Основной fingerprint с группировкой для лучшей читаемости #}
+  <div class="p-3 mb-3 font-mono text-sm text-white break-all border rounded-lg bg-gray-900/30 border-gray-700/30"
+       x-text="selectedEvent?.fingerprint || '—'"></div>
+
+  {# Дополнительная информация о fingerprint #}
+  <div class="flex flex-wrap gap-2 mt-2 text-xs">
+    <span class="px-2 py-1 text-gray-300 border rounded-full bg-gray-800/60 border-gray-700/30"
+          x-show="selectedEvent?.fingerprint"
+          x-text="'Длина: ' + (selectedEvent?.fingerprint?.length || 0) + ' симв.'"></span>
+    
+    <span class="px-2 py-1 text-gray-300 border rounded-full bg-gray-800/60 border-gray-700/30"
+          x-show="selectedEvent?.fingerprint"
+          x-text="'SHA-256'"></span>
+
+        <button type="button"
+            class="ml-auto inline-flex items-center gap-1 px-3 py-1.5 text-xs text-gray-300 transition border rounded-lg bg-gray-800/40 border-gray-700/30 hover:bg-gray-700/60 hover:text-white"
+            x-show="selectedEvent?.fingerprint"
+            @click="copyToClipboard(selectedEvent?.fingerprint)">
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+      </svg>
+      Копировать
+    </button>
+  </div>
+</div>

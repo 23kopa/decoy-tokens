@@ -1,0 +1,14 @@
+{% extends "layouts/base.html" %}
+
+{% block body_classes %}page-container{% endblock %}
+
+{% block content %}
+<main class="flex-1 flex min-h-screen {% block main_extra_classes %}{% endblock %}">
+    {% block public_body %}{% endblock %}
+</main>
+{% endblock %}
+
+{% block overlays %}
+  {% include "modals/auth/login.html" %}
+  {% include "modals/auth/register.html" %} 
+{% endblock %}

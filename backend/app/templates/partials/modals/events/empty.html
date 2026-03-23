@@ -1,0 +1,21 @@
+<template x-if="!loading && events.length === 0">
+  <div class="flex flex-col items-center justify-center py-16 text-center section-modal">
+    
+    {# Иконка в серых тонах (как в ip_history_card) #}
+    <div class="flex items-center justify-center w-16 h-16 mb-4 border rounded-2xl border-gray-700/50 bg-gradient-to-br from-gray-800/40 to-gray-900/60">
+      <svg class="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+      </svg>
+    </div>
+
+    <div class="max-w-sm px-6">
+      <h4 class="mb-2 text-sm font-semibold text-gray-300">
+        Нет событий
+      </h4>
+      <p class="text-xs leading-relaxed text-gray-500">
+        Токен ещё не был активирован. Как только кто-то перейдёт по ссылке или воспользуется токеном, здесь появятся события.
+      </p>
+    </div>
+  </div>
+</template>

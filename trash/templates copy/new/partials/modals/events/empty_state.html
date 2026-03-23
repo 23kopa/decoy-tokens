@@ -1,0 +1,11 @@
+  <template x-if="!loading && events.length === 0">
+    <div class="flex items-center justify-center flex-1 min-h-0 text-center bg-gray-700 rounded-2xl py-30">
+      <div class="max-w-md">
+        <div class="flex items-center justify-center w-12 h-12 mx-auto mb-3 text-xl border border-gray-800 rounded-2xl bg-gray-900/60">
+          🕵️
+        </div>
+        <div class="text-sm font-semibold text-gray-200">Пока нет событий</div>
+        <div class="mt-1 text-sm text-gray-500">Токен ещё не был активирован.</div>
+      </div>
+    </div>
+  </template>

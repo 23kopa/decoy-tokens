@@ -1,0 +1,48 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    env_file:
+      - .env
+    command: ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    depends_on:
+      - postgres
+    volumes:
+      - ./:/app
+    ports:
+      - "8000:8000"
+    networks:
+      - backend
+
+  frontend:
+    image: node:20-alpine
+    working_dir: /app/frontend
+    command: sh -c "npm ci && npm run dev -- --host 0.0.0.0 --port 5173"
+    volumes:
+      - ./:/app
+    ports:
+      - "5173:5173"
+    networks:
+      - backend
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-decoy_tokens_dev}
+      POSTGRES_USER: ${POSTGRES_USER:-dev}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dev}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data/pgdata
+    networks:
+      - backend
+    ports:
+      - "5432:5432"
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  postgres_dev_data:

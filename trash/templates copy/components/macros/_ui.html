@@ -1,0 +1,7 @@
+{% macro attrs(attrs={}, exclude=[]) -%}
+  {%- for key, value in (attrs or {}).items() -%}
+    {%- if key not in (exclude or []) and value is not none -%}
+      {{ key }}="{{ value }}"
+    {%- endif -%}
+  {%- endfor -%}
+{%- endmacro %}

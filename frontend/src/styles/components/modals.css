@@ -1,0 +1,26 @@
+/* frontend/src/styles/components/modals.css */
+@layer components {
+  .modal-base {
+    background-image: var(--section-bg);
+    border: var(--section-border);
+    box-shadow: var(--section-shadow);
+    border-radius: 1.5rem;
+    @apply backdrop-blur-md;
+  }
+
+  /* Заголовок модального окна */
+  .modal-header {
+    @apply px-6 py-4 border-b border-gray-700/50;
+    background-image: linear-gradient(to bottom, rgba(19, 29, 48, 0.92), rgba(13, 21, 38, 0.96));
+  }
+
+  /* Текст заголовка */
+  .modal-title {
+    @apply text-lg font-semibold tracking-tight text-white;
+  }
+  
+  /* Контейнер для иконки и заголовка */
+  .modal-header-content {
+    @apply flex items-center gap-3;
+  }
+}

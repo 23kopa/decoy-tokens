@@ -1,0 +1,29 @@
+<section class="mb-5 section-base shrink-0">
+<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+
+  <div class="p-3 transition-all duration-200 component-secondary sm:p-4">
+    <div class="text-2xs sm:text-xs font-medium tracking-wider text-gray-500 uppercase">Всего токенов</div>
+    <div class="mt-1.5 text-xl sm:mt-2 sm:text-2xl font-bold text-white">{{ total_tokens or 0 }}</div>
+    <div class="mt-1 text-[11px] sm:text-xs text-gray-500">в системе</div>
+  </div>
+
+  <div class="p-3 transition-all duration-200 component-secondary sm:p-4">
+    <div class="text-2xs sm:text-xs font-medium tracking-wider text-gray-500 uppercase">Событий (24ч)</div>
+    <div class="mt-1.5 text-xl sm:mt-2 sm:text-2xl font-bold text-white">{{ events_24h or 0 }}</div>
+    <div class="mt-1 text-[11px] sm:text-xs text-gray-500">все типы</div>
+  </div>
+
+  <div class="p-3 transition-all duration-200 component-secondary sm:p-4">
+    <div class="text-2xs sm:text-xs font-medium tracking-wider text-gray-500 uppercase">Уникальных отпечатков</div>
+    <div class="mt-1.5 text-xl sm:mt-2 sm:text-2xl font-bold text-white">{{ unique_fingerprints or 0 }}</div>
+    <div class="mt-1 text-[11px] sm:text-xs text-gray-500">Fingerprints</div>
+  </div>
+
+  <div class="p-3 transition-all duration-200 component-secondary sm:p-4">
+    <div class="text-2xs sm:text-xs font-medium tracking-wider text-gray-500 uppercase">Уникальных IP</div>
+    <div class="mt-1.5 text-xl sm:mt-2 sm:text-2xl font-bold text-white">{{ unique_ips or 0 }}</div>
+    <div class="mt-1 text-[11px] sm:text-xs text-gray-500">IP / UA / client</div>
+  </div>
+
+</div>
+</section>

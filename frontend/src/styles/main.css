@@ -1,0 +1,23 @@
+/* frontend/src/styles/main.css */
+@import "tailwindcss";
+
+@source "../../index.html";
+@source "../**/*.{js,ts}";
+@source "../../../backend/app/templates/**/*.html";
+
+@plugin "flowbite/plugin";
+@source "../../../node_modules/flowbite";
+
+@import "flowbite";
+@import "flowbite/src/themes/default";
+
+/* Импорт модульных стилей */
+@import "./base/variables.css";
+
+@import "./components/cards.css";
+@import "./components/modals.css";
+@import "./components/pages.css";
+@import "./components/sections.css";
+@import "./components/components.css";
+
+@import "./utilities/scrollbar.css";

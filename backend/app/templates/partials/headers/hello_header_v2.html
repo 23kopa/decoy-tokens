@@ -1,0 +1,87 @@
+<section class="relative max-w-7xl mx-auto px-4 py-20 overflow-hidden">
+  <!-- Анимированный фон с сеткой -->
+  <div class="absolute inset-0 opacity-20">
+    <div class="absolute inset-0" style="background-image: radial-gradient(circle at 1px 1px, rgb(59, 130, 246) 1px, transparent 0); background-size: 40px 40px;"></div>
+  </div>
+  
+  <div class="relative z-10 flex flex-col lg:flex-row items-center gap-12">
+    <!-- Левая колонка с контентом -->
+    <div class="flex-1 text-center lg:text-left">
+      <!-- Бейдж с эффектом неона -->
+      <div class="inline-flex mb-8">
+        <span class="relative px-4 py-2 bg-gray-900 rounded-lg overflow-hidden">
+          <span class="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-20"></span>
+          <span class="relative flex items-center gap-2 text-sm font-mono">
+            <span class="text-green-400">$</span>
+            <span class="text-blue-400">./decoytokens</span>
+            <span class="text-gray-400">--version</span>
+            <span class="text-white">v1.0</span>
+          </span>
+        </span>
+      </div>
+
+      <!-- Заголовок с эффектом печатной машинки -->
+      <h1 class="text-white font-mono font-bold text-4xl sm:text-5xl lg:text-6xl mb-6">
+        <span class="block">Ранее обнаружение</span>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+          вторжений_
+        </span>
+      </h1>
+
+      <!-- Терминал -->
+      <div class="bg-gray-900 rounded-lg p-4 mb-8 text-left font-mono text-sm border border-gray-800">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-3 h-3 rounded-full bg-red-500"></div>
+          <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+          <div class="w-3 h-3 rounded-full bg-green-500"></div>
+          <span class="text-gray-500 text-xs ml-2">decoy-terminal</span>
+        </div>
+        <p class="text-gray-300">
+          <span class="text-green-400">$</span> detect threats<br>
+          <span class="text-blue-400">✓</span> Обнаружено: <span class="text-yellow-400">0</span> угроз<br>
+          <span class="text-blue-400">✓</span> Активных ловушек: <span class="text-purple-400">∞</span><br>
+          <span class="text-gray-500">> Система готова к работе_</span>
+        </p>
+      </div>
+
+      <!-- Кнопки -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+        {{ buttons.modal_button(
+          "deploy --start",
+          "login",
+          variant="hero",
+          size="lg"
+        ) }}
+        
+        <button class="px-6 py-3 text-gray-300 hover:text-white border border-gray-800 hover:border-gray-700 rounded-lg font-mono text-sm transition flex items-center justify-center gap-2">
+          <span>⎈</span>
+          <span>Документация API</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Правая колонка с визуализацией -->
+    <div class="flex-1 relative">
+      <div class="aspect-square rounded-2xl bg-gradient-to-br from-blue-600/20 to-purple-600/20 p-1">
+        <div class="w-full h-full rounded-2xl bg-gray-900 p-6 border border-gray-800">
+          <!-- Интерактивная карта угроз -->
+          <div class="grid grid-cols-3 gap-3 h-full">
+            <div class="col-span-2 space-y-3">
+              <div class="h-12 bg-gray-800 rounded-lg animate-pulse"></div>
+              <div class="h-12 bg-gray-800 rounded-lg animate-pulse delay-100"></div>
+              <div class="h-12 bg-gray-800 rounded-lg animate-pulse delay-200"></div>
+            </div>
+            <div class="space-y-3">
+              <div class="h-24 bg-gradient-to-b from-green-500/20 to-blue-500/20 rounded-lg border border-green-500/30"></div>
+              <div class="h-24 bg-gradient-to-b from-red-500/20 to-purple-500/20 rounded-lg border border-red-500/30"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Плавающие элементы -->
+      <div class="absolute -top-4 -right-4 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl"></div>
+      <div class="absolute -bottom-4 -left-4 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl"></div>
+    </div>
+  </div>
+</section>

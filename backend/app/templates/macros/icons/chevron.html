@@ -1,0 +1,23 @@
+{% macro chevron_indicator(direction="right", class="w-5 h-5") %}
+  {% set base_class = class ~ " text-gray-500 transition-all duration-200 group-hover:text-white" %}
+
+  {% if direction == "right" %}
+    <svg class="{{ base_class }} group-hover:translate-x-0.5"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 5l7 7-7 7"/>
+    </svg>
+  {% elif direction == "down" %}
+    <svg class="{{ base_class }} group-open:rotate-180"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M19 9l-7 7-7-7"/>
+    </svg>
+  {% endif %}
+{% endmacro %}

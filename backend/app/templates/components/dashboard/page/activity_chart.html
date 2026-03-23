@@ -1,0 +1,40 @@
+<section class="flex flex-col flex-1 min-h-0 section-base h-full">
+
+  <div class="flex items-center justify-between shrink-0 mb-5 border-b border-gray-700/40 pb-4">
+      <div class="flex items-center gap-2">
+          <span class="text-lg font-semibold tracking-tight text-white">График активности</span>
+      </div>
+      <div class="flex gap-1 p-1 border rounded-lg bg-gray-900/40 border-gray-700/50">
+        <button class="px-3 py-1 text-xs font-medium text-white transition-all rounded-md bg-gray-800/80 hover:bg-gray-700">7д</button>
+        <button class="px-3 py-1 text-xs font-medium text-gray-400 transition-all rounded-md hover:text-white hover:bg-gray-800/60">30д</button>
+        <button class="px-3 py-1 text-xs font-medium text-gray-400 transition-all rounded-md hover:text-white hover:bg-gray-800/60">90д</button>
+      </div>
+  </div>
+
+  <div class="flex flex-col h-full min-h-0 p-5 justify-center items-center section-base">
+
+    {# Область графика #}
+    <div class="text-center ">
+      <div class="flex items-center justify-center w-12 h-12 mx-auto mb-3 border rounded-xl border-gray-700/50 bg-gradient-to-br from-gray-800/40 to-gray-900/60">
+        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+        </svg>
+      </div>
+      <div class="text-sm text-gray-400">Скоро...</div>
+      <div class="mt-1 text-xs text-gray-600">Позже тут появится график активности.</div>
+    </div>
+
+    {# Легенда #}
+    {#<div class="flex flex-wrap gap-2 mt-4">
+      <div class="flex items-center gap-2 px-3 py-1.5 border rounded-lg border-gray-700/50 bg-gradient-to-br from-gray-800/20 to-gray-900/30">
+        <span class="w-2 h-2 bg-blue-400 rounded-full"></span>
+        <span class="text-xs text-gray-400">Все события</span>
+      </div>
+      <div class="flex items-center gap-2 px-3 py-1.5 border rounded-lg border-gray-700/50 bg-gradient-to-br from-gray-800/20 to-gray-900/30">
+        <span class="w-2 h-2 bg-purple-400 rounded-full"></span>
+        <span class="text-xs text-gray-400">Уникальные</span>
+      </div>
+    </div>#}
+
+  </div>
+</section>

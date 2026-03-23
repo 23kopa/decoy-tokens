@@ -1,0 +1,88 @@
+{% import "macros/ui/modal.html" as modal %}
+{% import "macros/ui/buttons.html" as buttons %}
+{% import "macros/icons/base.html" as icons %}
+
+{# Подключаем Alpine.js компонент #}
+{% include "js/token-events.js" %}
+
+{% set body %}
+<div x-data="tokenEvents()"
+     x-init="init()"
+     @token-selected.window="tokenId = $event.detail.tokenId; loadData()"
+     class="relative flex flex-col w-full max-h-200">
+
+  {# TOP BAR - выносим в отдельный partial #}
+  {% include "partials/modals/token/header.html" %}
+
+  {# MAIN AREA #}
+  <template x-if="!loading && events.length === 0">
+    {% include "partials/modals/token/empty_state.html" %}
+  </template>
+
+  <template x-if="loading || events.length > 0">
+    <div class="flex flex-1 min-h-0 gap-3">
+      
+      {# LEFT: EVENTS LIST #}
+      <div class="flex min-h-0 w-[300px] min-w-[280px] flex-col">
+        <div class="flex-1 min-h-0 overflow-hidden bg-gray-700 border rounded-2xl border-gray-700/50">
+          <div class="h-full p-2 overflow-y-auto scrollbar-thin-dark">
+            <template x-for="event in events" :key="event.id">
+              {% include "components/events/event_item.html" %}
+            </template>
+          </div>
+        </div>
+      </div>
+
+      {# RIGHT: DETAILS #}
+      <div class="flex flex-col flex-1 min-h-0 overflow-hidden bg-gray-700 border border-gray-800 rounded-2xl">
+        
+        {# TABS #}
+        {% include "partials/modals/token/tabs_header.html" %}
+
+        {# TAB CONTENT #}
+        <div class="flex-1 min-h-0 p-4 overflow-y-auto scrollbar-thin-dark" x-show="selectedEvent">
+          <template x-if="selectedEvent">
+            <div>
+              {# SUMMARY TAB #}
+              <div x-show="tab === 'summary'" class="space-y-3">
+                <div class="grid grid-cols-1 gap-3 lg:grid-cols-2">
+                  {% include "components/events/ip_card.html" %}
+                  {% include "components/events/location_card.html" %}
+                  {% include "components/events/provider_card.html" %}
+                  {% include "components/events/timeline_card.html" %}
+                </div>
+                <div class="col-span-2">
+                  {% include "components/events/fingerprint_card.html" %}
+                </div>
+              </div>
+
+              {# HEADERS TAB #}
+              <div x-show="tab === 'headers'" class="space-y-4">
+                {% include "components/events/user_agent_card.html" %}
+                <div class="grid grid-cols-2 gap-3">
+                  {% include "components/events/headers/accept.html" %}
+                  {% include "components/events/headers/accept_language.html" %}
+                  {% include "components/events/headers/accept_encoding.html" %}
+                  {% include "components/events/headers/connection.html" %}
+                </div>
+                {% include "components/events/headers/all_headers.html" %}
+              </div>
+
+              {# HISTORY TAB #}
+              <div x-show="tab === 'history'">
+                {% include "components/events/ip_history.html" %}
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  {# FOOTER #}
+  {% include "partials/modals/token/footer.html" %}
+
+</div>
+{% endset %}
+
+{{ modal.base("token-events-modal", "События токена", body, size="5xl") }}

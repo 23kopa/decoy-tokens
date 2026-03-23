@@ -1,0 +1,66 @@
+{% import "components/macros/cards/preview.html" as cards %}
+
+<section class="flex flex-col h-full min-h-0 p-4 bg-gray-700 shadow-xl rounded-xl">
+  
+  <div class="flex flex-col gap-3 mb-3 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <div class="font-semibold text-white">Токены</div>
+      <div class="text-xs text-gray-500">Последние созданные / самые активные</div>
+    </div>
+
+    <div class="flex gap-2">
+      <input type="text"
+             name="q"
+             placeholder="Поиск по имени / типу…"
+             class="w-full px-3 py-2 text-sm text-white bg-gray-800 rounded-lg" />
+
+      <select name="type"
+              class="px-5 py-2 text-sm text-gray-200 bg-gray-800 rounded-lg">
+        <option value="">Все типы</option>
+        <option value="link">link</option>
+        <option value="email">email</option>
+        <option value="dns">dns</option>
+        <option value="image">image</option>
+        <option value="word">word</option>
+        <option value="file">file</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="relative flex-1 min-h-0 p-3 overflow-y-auto border border-gray-800 rounded-xl scrollbar-thin-dark">
+    {% if tokens and tokens|length %}
+
+    {% if token_card and token_card|length %}
+      <ul class="absolute inset-0 p-3 space-y-2">
+        {% for t in token_card %}
+          {{ cards.token_item(t, loop.index) }}
+        {% endfor %}
+      </ul>
+    {% endif %}
+      
+    {% else %}
+
+      <div class="flex items-center justify-center h-full">
+        <div class="p-8 text-center border border-gray-600 border-dashed rounded-xl bg-gray-800/60">
+          <div class="font-semibold text-white">Пока нет токенов</div>
+          <div class="mt-1 text-sm text-gray-400">
+            Создайте токен, чтобы начать отслеживание.
+          </div>
+          <a href="/home"
+            class="inline-flex items-center px-3 py-2 mt-4 text-sm text-gray-200 transition bg-gray-900 border border-gray-700 rounded-lg hover:bg-gray-700">
+            Создать токен
+          </a>
+        </div>
+      </div>
+      
+    {% endif %}
+  </div>
+
+  <div class="flex items-center justify-between mt-3 text-xs text-gray-500">
+    <div>
+      Показано:
+      <span class="text-gray-300">{{ shown_count|default(tokens|length, true) }}</span>
+    </div>
+    <a href="/home" class="text-gray-300 transition hover:text-white">Создать токен</a>
+  </div>
+</section>

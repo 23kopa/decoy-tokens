@@ -1,0 +1,94 @@
+{% import "macros/icons/base.html" as icons %}
+{% import "macros/icons/chevron.html" as chevron_icons %}
+
+{% macro token_item(token, index=None) %}
+<li x-data="{ 
+      tokenId: '{{ token.id }}',
+      get cardStatus() { 
+        return $store.tokenCards?.items?.[this.tokenId] 
+      },
+      get isActive() {
+        return this.cardStatus?.isActive ?? {{ 'true' if token.is_active else 'false' }};
+      }
+    }"
+    x-init="$store.tokenCards?.register(tokenId, { 
+      isActive: {{ 'true' if token.is_active else 'false' }},
+      name: '{{ token.name }}',
+      type: '{{ token.type }}'
+    })">
+
+  <button type="button"
+          class="group w-full rounded-2xl px-4 py-3 text-left transition-all duration-200"
+          :class="isActive 
+            ? 'component-base hover:border-gray-600/60 hover:bg-gray-800/20' 
+            : 'component-base border-gray-700/30 bg-gray-900/20 opacity-60'"
+
+          data-modal-target="token-events-modal"
+          data-modal-toggle="token-events-modal"
+          data-token-id="{{ token.id }}"
+          data-token-name="{{ token.name }}"
+          data-token-type="{{ token.type }}"
+          data-token-desc="{{ token.desc or '' }}"
+          data-token-timestamp="{{ token.created_at }}"
+          data-trigger-url="{{ token.trigger_url or '' }}"
+          :data-token-active="isActive">
+
+    <div class="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+
+      {# Левая часть #}
+      <div class="min-w-0 flex-1">
+        <div class="flex min-w-0 items-center gap-2.5 sm:gap-3">
+          <span class="relative flex h-2.5 w-2.5 shrink-0">
+            <span class="absolute inline-flex h-full w-full rounded-full opacity-70"
+                  :class="isActive ? 'bg-emerald-400 animate-ping' : 'bg-gray-500'"></span>
+            <span class="relative inline-flex h-2.5 w-2.5 rounded-full ring-2 ring-gray-900"
+                  :class="isActive ? 'bg-emerald-400' : 'bg-gray-500'"></span>
+          </span>
+
+          <div class="min-w-0 truncate text-sm font-semibold transition-colors shrink-0"
+              :class="isActive ? 'text-white' : 'text-gray-300'">
+            {{ token.name|default('Token #' ~ index, true) }}
+          </div>
+
+          <span class="shrink-0 inline-flex items-center rounded-full border px-2 py-0.5 text-2xs font-medium uppercase tracking-wide sm:px-2.5 sm:py-1 sm:text-[11px]"
+                :class="isActive
+                  ? 'border-blue-500/20 bg-blue-500/10 text-blue-300'
+                  : 'border-gray-700 bg-gray-800/70 text-gray-400'">
+            {{ token.type }}
+          </span>
+
+          {# Описание в строку только на sm+ #}
+          <div class="hidden min-w-0 flex-1 sm:block">
+            <div class="truncate text-sm"
+                :class="isActive ? 'text-gray-400' : 'text-gray-500'">
+              {{ token.desc or 'Без описания' }}
+            </div>
+          </div>
+        </div>
+
+        {# Описание отдельной строкой только на mobile #}
+        <div class="mt-1.5 pl-5 text-sm sm:hidden">
+          <div class="truncate"
+              :class="isActive ? 'text-gray-400' : 'text-gray-500'">
+            {{ token.desc or 'Без описания' }}
+          </div>
+        </div>
+      </div>
+
+      {# Правая часть #}
+      <div class="flex items-center justify-between gap-3 pl-5 sm:shrink-0 sm:justify-end sm:pl-0">
+        <div class="flex items-center gap-1.5 text-xs"
+             :class="isActive ? 'text-gray-400' : 'text-gray-500'">
+          {{ icons.base_icons('clock', class="h-3.5 w-3.5 shrink-0") }}
+          <span class="font-mono whitespace-nowrap">{{ token.created_at }}</span>
+        </div>
+
+        <div class="flex items-center justify-end text-gray-500 transition-all duration-200 group-hover:translate-x-0.5 group-hover:text-gray-300">
+          {{ chevron_icons.chevron_indicator('right') }}
+        </div>
+      </div>
+
+    </div>
+  </button>
+</li>
+{% endmacro %}

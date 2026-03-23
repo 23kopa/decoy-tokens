@@ -1,0 +1,74 @@
+{% import "macros/cards/token_preview.html" as cards %}
+{% import "macros/icons/types.html" as icons %}
+{% import "macros/icons/chevron.html" as chevron_icons %}
+
+<section class="flex h-full min-h-0 flex-col section-base">
+
+    <div class="flex items-center justify-between shrink-0 mb-5 border-b border-gray-700/40 pb-4">
+        <div class="flex items-center gap-2">
+            <span class="text-lg font-semibold tracking-tight text-white">Выберите тип токена</span>
+        </div>
+        <a href="/dashboard" class="flex items-center gap-1 px-3 py-1.5 text-xs text-gray-400 transition border rounded-lg border-gray-700/50 hover:bg-gray-800 hover:text-white hover:border-gray-600">
+            <span>Мои токены</span>
+        </a>
+    </div>
+
+    <div class="grid flex-1 min-h-0 grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2 auto-rows-fr">
+        
+        {{ cards.token_type(
+            title="Link-токен",
+            description="Генерирует уникальную URL-ссылку для отслеживания открытий и метаданных.",
+            icon=icons.type_icons("link"),
+            modal_id="link",
+            token_type="link",
+            enabled=true
+        ) }}
+
+        {{ cards.token_type(
+            title="Email-токен",
+            description="Трекинг открытия письма/пикселя и базовая атрибуция клиента.",
+            icon=icons.type_icons("email"),
+            modal_id="email",
+            token_type="email",
+            enabled=false
+        ) }}
+
+        {{ cards.token_type(
+            title="QR-токен",
+            description="Отдаёт файл и фиксирует факт скачивания/открытия (в зависимости от механики).",
+            icon=icons.type_icons("qr"),
+            modal_id="qr",
+            token_type="file",
+            enabled=false
+        ) }}
+
+        {{ cards.token_type(
+            title="DNS-токен",
+            description="Маркер для интеграций и контроля утечек через запросы к endpoint.",
+            icon=icons.type_icons("dns"),
+            modal_id="dns",
+            token_type="dns",
+            enabled=false
+        ) }}
+
+        {{ cards.token_type(
+            title="Image-токен",
+            description="Встраиваемый image beacon для фиксации открытия/загрузки.",
+            icon=icons.type_icons("image"),
+            modal_id="image",
+            token_type="image",
+            enabled=false
+        ) }}
+
+        {{ cards.token_type(
+            title="Word-токен",
+            description="Документ-приманка с трекингом открытия/доступа.",
+            icon=icons.type_icons("word"),
+            modal_id="word",
+            token_type="word",
+            enabled=false
+        ) }}
+        
+    </div>
+
+</section>

@@ -1,0 +1,268 @@
+{% from "macros/ui/buttons.html" import button %}
+{% from "macros/ui/fields.html" import input, textarea, select, checkbox %}
+{% from "macros/ui/forms.html" import form %}
+
+{% set token_meta = {
+  "link": {
+    "title": "Link-токен",
+    "description": "Генерирует уникальную URL-ссылку для отслеживания открытий и метаданных.",
+    "icon_bg": "bg-blue-500/10",
+    "icon_border": "border-blue-500/20",
+    "icon_text": "text-blue-400"
+  },
+  "email": {
+    "title": "Email-токен",
+    "description": "Трекинг открытия письма/пикселя и базовая атрибуция клиента.",
+    "icon_bg": "bg-amber-500/10",
+    "icon_border": "border-amber-500/20",
+    "icon_text": "text-amber-400"
+  },
+  "file": {
+    "title": "Создание QR-токена",
+    "description": "Подготовьте QR-токен для отслеживания сканирования, открытия ссылки или загрузки контента.",
+    "icon_bg": "bg-emerald-500/10",
+    "icon_border": "border-emerald-500/20",
+    "icon_text": "text-emerald-400"
+  },
+  "dns": {
+    "title": "Создание DNS-токена",
+    "description": "Создайте DNS-маркер для контроля обращений к endpoint и фиксации сетевой активности.",
+    "icon_bg": "bg-cyan-500/10",
+    "icon_border": "border-cyan-500/20",
+    "icon_text": "text-cyan-400"
+  },
+  "image": {
+    "title": "Создание Image-токена",
+    "description": "Настройте image beacon для фиксации загрузки ресурса и получения технических метаданных.",
+    "icon_bg": "bg-pink-500/10",
+    "icon_border": "border-pink-500/20",
+    "icon_text": "text-pink-400"
+  },
+  "word": {
+    "title": "Создание Word-токена",
+    "description": "Подготовьте документ-приманку для отслеживания открытия и взаимодействия с файлом.",
+    "icon_bg": "bg-indigo-500/10",
+    "icon_border": "border-indigo-500/20",
+    "icon_text": "text-indigo-400"
+  }
+} %}
+
+{% set meta = token_meta.get(token_type, {
+  "title": "Создание токена",
+  "description": "Заполните основные поля и настройте поведение токена.",
+  "icon_bg": "bg-gray-500/10",
+  "icon_border": "border-gray-500/20",
+  "icon_text": "text-gray-400"
+}) %}
+
+<div x-transition:enter="transition ease-out duration-300"
+     x-transition:enter-start="opacity-0 translate-y-1"
+     x-transition:enter-end="opacity-100 translate-y-0"
+     class="space-y-4">
+
+  {# Верхний инфо-блок #}
+  <div class="p-4 border rounded-2xl component-secondary">
+    <div class="flex items-start gap-3">
+      <div class="flex items-center justify-center w-10 h-10 border rounded-xl shrink-0 {{ meta.icon_bg }} {{ meta.icon_border }}">
+        {% if token_type == "link" %}
+          <svg class="w-5 h-5 {{ meta.icon_text }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 010 5.656l-3 3a4 4 0 01-5.656-5.656l1.5-1.5m5.656-5.656a4 4 0 015.656 5.656l-1.5 1.5"></path>
+          </svg>
+        {% elif token_type == "email" %}
+          <svg class="w-5 h-5 {{ meta.icon_text }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l9 6 9-6m-18 8h18V8H3v8z"></path>
+          </svg>
+        {% elif token_type == "file" %}
+          <svg class="w-5 h-5 {{ meta.icon_text }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 4.5h6v6h-6v-6zm9 0h6v6h-6v-6zm-9 9h6v6h-6v-6zm9 3h3m0 0v3m0-3h-3"></path>
+          </svg>
+        {% elif token_type == "dns" %}
+          <svg class="w-5 h-5 {{ meta.icon_text }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9h8M8 15h5M7 3h10l4 4v10a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z"></path>
+          </svg>
+        {% elif token_type == "image" %}
+          <svg class="w-5 h-5 {{ meta.icon_text }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4-4 4 4 4-6 4 6M4 6h16v12H4z"></path>
+          </svg>
+        {% elif token_type == "word" %}
+          <svg class="w-5 h-5 {{ meta.icon_text }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 3h7l5 5v13H7V3zm7 0v5h5"></path>
+          </svg>
+        {% else %}
+          <svg class="w-5 h-5 {{ meta.icon_text }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16M4 12h16M4 17h10"></path>
+          </svg>
+        {% endif %}
+      </div>
+
+      <div class="min-w-0">
+        <div class="text-base font-semibold text-white">
+          {{ meta.title }}
+        </div>
+        <div class="mt-1 text-sm text-gray-400">
+          {{ meta.description }}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% call forms.form(action="#", method="post", class_extra="space-y-4", attrs={"@submit.prevent": "submit"}) %}
+
+    {# Основной блок #}
+    <div class="p-4 border rounded-2xl component-modal border-gray-700/50">
+      <div class="flex items-center gap-2 mb-4">
+        <div class="flex items-center justify-center text-blue-400 border rounded-lg w-7 h-7 bg-blue-500/10 border-blue-500/20">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16M4 12h16M4 17h10"></path>
+          </svg>
+        </div>
+        <div class="text-xs font-medium tracking-wider text-gray-400 uppercase">
+          Основные данные
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        {{ fields.input(
+          name="name",
+          label="Название",
+          placeholder="Токен #1",
+          required=true,
+          wrapper_class="mb-0",
+          attrs={"x-model": "formData.name"},
+          help_text="Имя для быстрого поиска."
+        ) }}
+
+        {{ fields.input(
+          name="email",
+          type="email",
+          label="Почта",
+          placeholder="user@example.com",
+          required=true,
+          wrapper_class="mb-0",
+          attrs={"x-model": "formData.email"},
+          help_text="Куда привязать уведомления."
+        ) }}
+      </div>
+
+      <div class="mt-4">
+        {{ fields.textarea(
+          name="description",
+          label="Описание",
+          placeholder="Где будет размещён токен и для чего он нужен",
+          rows=3,
+          wrapper_class="mb-0",
+          attrs={"x-model": "formData.desc"},
+          help_text="Необязательно, но удобно для дальнейшей работы."
+        ) }}
+      </div>
+    </div>
+
+    {% if token_type == "link" %}
+      <div class="p-4 border rounded-2xl component-modal border-gray-700/50">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="flex items-center justify-center text-purple-400 border rounded-lg w-7 h-7 bg-purple-500/10 border-purple-500/20">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 010 5.656l-3 3a4 4 0 01-5.656-5.656l1.5-1.5m5.656-5.656a4 4 0 015.656 5.656l-1.5 1.5"></path>
+            </svg>
+          </div>
+          <div class="text-xs font-medium tracking-wider text-gray-400 uppercase">
+            Поведение ссылки
+          </div>
+        </div>
+
+        <label class="flex items-start gap-3 p-3 transition border cursor-pointer rounded-xl bg-gray-800/40 border-gray-700/60 hover:border-gray-600/80 hover:bg-gray-800/60">
+          <input
+            type="checkbox"
+            id="enable-redirect"
+            x-model="enableRedirect"
+            class="w-4 h-4 mt-0.5 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2"
+          >
+
+          <div class="min-w-0">
+            <div class="text-sm font-medium text-white">
+              Использовать редирект
+            </div>
+            <div class="mt-1 text-xs text-gray-400">
+              После активации токен перенаправит пользователя на нужный URL.
+            </div>
+          </div>
+        </label>
+
+        <div x-show="enableRedirect"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 translate-y-2"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             class="mt-4">
+          <div class="p-4 border rounded-xl bg-gray-900/30 border-gray-700/50">
+            {{ fields.input(
+              name="redirect_url",
+              type="url",
+              placeholder="https://example.com",
+              wrapper_class="mb-0",
+              attrs={"x-model": "formData.redirectUrl"},
+              help_text="Укажи полный URL со схемой https://"
+            ) }}
+          </div>
+        </div>
+      </div>
+
+    {% elif token_type == "file" %}
+      {# Настройки file / qr-токена #}
+      <div class="p-4 border rounded-2xl component-modal border-gray-700/50">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="flex items-center justify-center border rounded-lg w-7 h-7 text-emerald-400 bg-emerald-500/10 border-emerald-500/20">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 4.5h6v6h-6v-6zm9 0h6v6h-6v-6zm-9 9h6v6h-6v-6zm9 3h3m0 0v3m0-3h-3"></path>
+            </svg>
+          </div>
+          <div class="text-xs font-medium tracking-wider text-gray-400 uppercase">
+            Параметры QR
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          {{ fields.input(
+            name="qr_data",
+            type="text",
+            label="Данные для QR-кода",
+            placeholder="Текст или ссылка для QR-кода",
+            wrapper_class="mb-0",
+            attrs={"x-model": "formData.qrData"},
+            help_text="Это содержимое будет зашито в QR."
+          ) }}
+
+          {{ fields.select(
+            name="qr_size",
+            label="Размер QR-кода",
+            options={
+              "small": "Маленький",
+              "medium": "Средний",
+              "large": "Большой"
+            },
+            wrapper_class="mb-0",
+            attrs={"x-model": "formData.qrSize"},
+            help_text="Размер влияет только на визуальное отображение."
+          ) }}
+        </div>
+      </div>
+    {% endif %}
+
+    {# Нижняя панель #}
+    <div class="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
+      <div class="text-xs text-gray-500">
+        После создания токен появится в списке и будет готов к использованию.
+      </div>
+
+      <div class="w-full sm:w-auto sm:min-w-[180px]">
+        {{ buttons.button(
+          text="Создать токен",
+          variant="hero",
+          size="md",
+          button_type="submit",
+          class_extra="w-full",
+          attrs={":disabled": "showProgress"}
+        ) }}
+      </div>
+    </div>
+
+  {% endcall %}
+</div>

@@ -1,0 +1,13 @@
+{% extends "base/base.html" %}
+
+{% block body_classes %}bg-gray-900{% endblock %}
+
+{% block content %}
+<main class="flex-1 flex min-h-screen {% block main_extra_classes %}{% endblock %}">
+    {% block public_body %}{% endblock %}
+</main>
+{% endblock %}
+
+{% block overlays %}
+  {% include "components/modals/auth/_auth.html" %}
+{% endblock %}

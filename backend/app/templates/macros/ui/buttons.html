@@ -1,0 +1,106 @@
+{% import "macros/ui/_ui.html" as ui %}
+
+{% macro _buttons_base_classes(variant="primary", size="md", extra="") -%}
+
+  {%- set variants = {
+      "primary": "text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 focus:ring-primary-900",
+      "hero": "text-gray-300 border-2 border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 text-white border-gray-700 hover:bg-gray-700 focus:ring-gray-800",
+      "secondary": "bg-gray-800 border border-gray-700 rounded-lg text-white",
+      "danger": "text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300"
+  } -%}
+
+  {%- set sizes = {
+      "sm": "px-3 py-2 text-sm",
+      "md": "px-5 py-3 text-base",
+      "lg": "px-6 py-4 text-lg"
+  } -%}
+
+  {{- (
+    "inline-flex items-center justify-center font-medium rounded-lg " ~
+    sizes.get(size, sizes["md"]) ~ " " ~
+    variants.get(variant, variants["primary"]) ~
+    " focus:outline-none focus:ring-2 " ~
+    extra
+  ) -}}
+
+{%- endmacro %}
+
+{# button #}
+{% macro button(text, variant="primary", size="md", button_type="button", icon_name=None, icon_class=None, attrs={}, class_extra="") %}
+  <button
+    type="{{ button_type }}"
+    class="{{ _buttons_base_classes(variant, size, class_extra) }}"
+    {{ ui.attrs(attrs) }}
+  >
+    {% if icon_name %}
+    {% from "components/macros/icons.html" import icon %}
+    {{ icon(icon_name, class=icon_class) }}
+    {% endif %}
+    {{ text }}
+  </button>
+{% endmacro %}
+
+{# link #}
+{% macro link(text, href, variant="primary", size="md", icon_name=None, icon_class=None, attrs={}, class_extra="") %}
+  <a
+    href="{{ href }}"
+    class="{{ _buttons_base_classes(variant, size, class_extra) }}"
+    {{ ui.attrs(attrs) }}
+  >
+    {% if icon_name %}
+    {% from "components/macros/icons.html" import icon %}
+    {{ icon(icon_name, class=icon_class) }}
+    {% endif %}
+    {{ text }}
+  </a>
+{% endmacro %}
+
+{# modal_button #}
+{% macro modal_button(text, modal_id, variant="primary", size="md", icon_name=None, icon_class=None, attrs={}, class_extra="") %}
+  {%- set merged = (attrs or {}).copy() -%}
+  {%- set _ = merged.update({
+      "data-modal-target": modal_id,
+      "data-modal-toggle": modal_id
+  }) -%}
+  {{ button(text, variant=variant, size=size, button_type="button", attrs=merged, class_extra=class_extra) }}
+{% endmacro %}
+
+{# copy_button #}
+{% macro copy_button(target_id=None, value=None, size="md", attrs={}, class_extra="") %}
+  <div
+    x-data="{ copied: false }"
+    @click.outside="copied = false"
+    class="inline-block"
+  >
+    <button
+      type="button"
+      @click="
+        const text = {% if target_id %}document.getElementById('{{ target_id }}').value{% elif value %}'{{ value }}'{% endif %};
+        if (window.copyToClipboard) {
+          window.copyToClipboard.copy(text).then(() => {
+            copied = true;
+            setTimeout(() => copied = false, 2000);
+          });
+        } else {
+          navigator.clipboard.writeText(text).then(() => {
+            copied = true;
+            setTimeout(() => copied = false, 2000);
+          });
+        }
+      "
+      class="{{ _buttons_base_classes('secondary', size, class_extra) }}"
+      :class="copied ? 'bg-green-600 text-white border-green-600' : ''"
+      {{ ui.attrs(attrs) }}
+    >
+      <span x-show="!copied">
+        Копировать
+      </span>
+      <span x-show="copied" class="flex items-center">
+        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        Скопировано
+      </span>
+    </button>
+  </div>
+{% endmacro %}

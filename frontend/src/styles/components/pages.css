@@ -1,0 +1,14 @@
+@layer components {
+
+   .page-container {
+    background-image: var(--page-bg);
+    min-height: 100vh;
+  } 
+
+  .page-component {
+    background-image: var(--page-component-bg);
+    border: var(--page-component-border);
+    box-shadow: var(--page-component-shadow);
+    border-radius: 1.0rem;
+  }
+}

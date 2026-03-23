@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html lang="{{ lang|default('ru') }}" class="h-full">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1" />
+
+  <title>
+    {% block full_title %} {% block title %}Welcome!{% endblock %} | TokenGuard {% endblock %}
+  </title>
+
+  <meta name="description"
+        content="{% block meta_description %}Онлайн-сервис для размещения цифровых ловушек и раннего выявления вторжений.{% endblock %}" />
+  
+  {% block head_extra %}{% endblock %}
+
+  <link rel="icon" type="image/svg+xml" href="/static/images/favicons/tokenguard.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/images/favicons/tokenguard.svg">
+
+</head>
+
+<body class="min-h-screen lg:h-screen flex flex-col {% block body_classes %}{% endblock %}">
+  {% block content %}{% endblock %}
+  
+  {% if use_vite %} 
+    <script type="module" src="http://localhost:5173/src/main.js"></script>
+  {% else %}
+    <script type="module" src="/static/js/main.js"></script>
+  {% endif %}
+
+  {% if use_vite %}
+    <link rel="stylesheet" href="http://localhost:5173/src/styles/main.css">
+  {% else %}
+    <link rel="stylesheet" href="/static/css/style.css">
+  {% endif %}
+
+  {% block scripts %}{% endblock %}
+  {% block overlays %}{% endblock %}
+
+  </body>
+
+</html>

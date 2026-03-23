@@ -1,0 +1,285 @@
+{% import "components/macros/modal.html" as modal %}
+{% import "components/macros/buttons.html" as buttons %}
+{% import "components/macros/icons.html" as icons %}
+{% import "components/macros/cards/details.html" as details %}
+
+
+{% set body %}
+<div x-data="tokenEvents()"
+     class="relative flex flex-col w-full max-h-200">
+
+{# TOP BAR #}
+<div class="sticky top-0 z-10 p-5 mb-4 border shadow-lg rounded-2xl bg-gradient-to-br from-gray-800/40 to-gray-900/60 backdrop-blur-sm border-gray-700/50">
+  
+  <div class="flex items-center justify-between mb-3">
+    <div class="flex items-center gap-3">
+      <div class="relative">
+        <div class="w-3 h-3 rounded-full" 
+            :class="isActive ? 'bg-emerald-400' : 'bg-gray-500'">
+        </div>
+        <div x-show="isActive" 
+            class="absolute inset-0 w-3 h-3 rounded-full opacity-75 bg-emerald-400 animate-ping">
+        </div>
+      </div>
+      <h3 class="text-xl font-bold tracking-tight text-white" x-text="tokenName"></h3>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="px-2.5 py-1 text-xs font-medium rounded-full bg-gray-700 text-gray-300" x-text="'type: ' + (tokenType || '—')"></div>
+    </div>
+  </div>
+  
+  {# Сетка с информацией о токене #}
+  <div class="grid grid-cols-4 gap-4 mb-1">
+    <div class="px-3 py-2 border rounded-lg border-gray-700/50 bg-gray-900/30">
+      <div class="text-[10px] font-medium tracking-wider text-gray-500 uppercase mb-1">ID токена</div>
+      <div class="font-mono text-sm text-white truncate" x-text="tokenId || '—'"></div>
+    </div>
+    <div class="px-3 py-2 border rounded-lg border-gray-700/50 bg-gray-900/30">
+      <div class="text-[10px] font-medium tracking-wider text-gray-500 uppercase mb-1">Создан</div>
+      <div class="flex items-center gap-1.5 text-sm text-gray-300">
+        {{ icons.base_icons('calendar', class="w-3.5 h-3.5 text-gray-500") }}
+        <span x-text="tokenTimestamp || '—'"></span>
+      </div>
+    </div>
+    <template x-if="stats">
+      <div class="px-3 py-2 border rounded-lg border-gray-700/50 bg-gray-900/30">
+        <div class="text-[10px] font-medium tracking-wider text-gray-500 uppercase mb-1">Всего событий</div>
+        <div class="flex items-baseline gap-1">
+          <span class="text-xl font-bold text-white" x-text="stats.total_events"></span>
+          <span class="text-xs text-gray-500">событий</span>
+        </div>
+      </div>
+    </template>
+    <template x-if="stats">
+      <div class="px-3 py-2 border rounded-lg border-gray-700/50 bg-gray-900/30">
+        <div class="text-[10px] font-medium tracking-wider text-gray-500 uppercase mb-1">Уникальные</div>
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-1">
+            <span class="text-sm font-semibold text-white" x-text="stats.unique_ips"></span>
+            <span class="text-[10px] text-gray-500">IP</span>
+          </div>
+          <div class="w-px h-4 bg-gray-700"></div>
+          <div class="flex items-center gap-1">
+            <span class="text-sm font-semibold text-white" x-text="stats.unique_fingerprints"></span>
+            <span class="text-[10px] text-gray-500">FP</span>
+          </div>
+        </div>
+      </div>
+    </template>
+    <template x-if="!stats">
+      <div class="col-span-2"></div>
+    </template>
+  </div>
+</div>
+
+  {# MAIN AREA: EMPTY #}
+  <template x-if="!loading && events.length === 0">
+    <div class="flex items-center justify-center flex-1 min-h-0 text-center bg-gray-700 rounded-2xl py-30">
+      <div class="max-w-md">
+        <div class="flex items-center justify-center w-12 h-12 mx-auto mb-3 text-xl border border-gray-800 rounded-2xl bg-gray-900/60">
+          🕵️
+        </div>
+        <div class="text-sm font-semibold text-gray-200">Пока нет событий</div>
+        <div class="mt-1 text-sm text-gray-500">Токен ещё не был активирован.</div>
+      </div>
+    </div>
+  </template>
+
+  {# MAIN AREA #}
+  <template x-if="loading || events.length > 0">
+    <div class="flex flex-1 min-h-0 gap-3">
+
+    {# LEFT: EVENTS #}
+    <div class="flex min-h-0 w-[300px] min-w-[280px] flex-col">
+      <div class="flex-1 min-h-0 overflow-hidden bg-gray-700 border rounded-2xl backdrop-blur-sm border-gray-700/50">
+        <div class="h-full p-2 overflow-y-auto scrollbar-thin-dark">
+
+          {# LIST #}
+          <template x-for="event in events" :key="event.id">
+            {{ details.event_item() }}
+          </template>
+
+        </div>
+      </div>
+    </div>
+
+    {# RIGHT: DETAILS #}
+    <div class="flex flex-col flex-1 min-h-0 overflow-hidden bg-gray-700 border border-gray-800 rounded-2xl"
+        x-data="{ tab: 'summary' }">
+
+      {# TAB HEADER #}
+      <div class="sticky top-0 z-10 bg-gray-700 border-b border-gray-800">
+
+        {# META HEADER #}
+        <div class="flex items-center justify-between gap-3 px-4 py-3">
+          <div class="min-w-0">
+            <div class="text-sm font-semibold text-gray-200">Детали события</div>
+            <div class="mt-1 font-mono text-xs text-gray-500">
+              FP:
+              <span class="text-gray-400" x-text="selectedEvent?.fingerprint || '—'"></span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1 shrink-0">
+            <span class="inline-flex rounded-lg border px-2 py-1 text-[11px]"
+                  x-show="selectedEvent"
+                  :class="selectedEvent ? getEventStatusColor(selectedEvent) : ''"
+                  x-text="selectedEvent ? (selectedEvent.is_first ? 'Первый' : (selectedEvent.additional_data?.bot_info?.is_bot ? 'Бот' : 'Повтор')) : ''">
+            </span>
+
+            <template x-if="selectedEvent && selectedEvent.seen_count > 1">
+              <span class="inline-flex rounded-lg border px-2 py-1 text-[11px] border-gray-700 text-gray-300 bg-gray-900/20">
+                ×<span x-text="selectedEvent.seen_count"></span>
+              </span>
+            </template>
+          </div>
+        </div>
+
+        {# NAV / ACTION BAR #}
+        <div class="flex items-center justify-between gap-3 px-4 py-2 border-t border-gray-800">
+          <div class="flex flex-wrap items-center gap-1">
+            <button type="button"
+                    @click="tab = 'summary'"
+                    class="rounded-lg px-3 py-1.5 text-xs font-medium transition"
+                    :class="tab === 'summary'
+                      ? 'bg-gray-800 text-white shadow-sm'
+                      : 'border-gray-800 text-gray-300 bg-gray-900/40 hover:bg-gray-800'">
+              Сводка
+            </button>
+
+            <button type="button"
+                    @click="tab = 'headers'"
+                    class="rounded-lg px-3 py-1.5 text-xs font-medium transition"
+                    :class="tab === 'headers'
+                      ? 'bg-gray-800 text-white shadow-sm'
+                      : 'border-gray-800 text-gray-300 bg-gray-900/40 hover:bg-gray-800'">
+              Headers
+            </button>
+
+            <button type="button"
+                    @click="tab = 'history'"
+                    class="rounded-lg px-3 py-1.5 text-xs font-medium transition"
+                    :class="tab === 'history'
+                      ? 'bg-gray-800 text-white shadow-sm'
+                      : 'border-gray-800 text-gray-300 bg-gray-900/40 hover:bg-gray-800'">
+              История
+            </button>
+
+          </div>
+
+          <div class="flex items-center gap-1 shrink-0">
+            <button type="button"
+                    title="Скачать JSON события"
+                    class="flex items-center justify-center w-8 h-8 text-gray-300 border border-gray-800 rounded-lg bg-gray-900/40 hover:bg-gray-800"
+                    :disabled="!selectedEvent"
+                    @click="downloadEvent(selectedEvent)">
+              {{ icons.base_icons('download', class="w-4 h-4") }}
+            </button>
+
+            <button type="button"
+                    title="Обновить события"
+                    class="flex items-center justify-center w-8 h-8 text-gray-300 border border-gray-800 rounded-lg bg-gray-900/40 hover:bg-gray-800"
+                    :disabled="loading || !tokenId"
+                    @click="loadData()">
+              <span :class="loading ? 'animate-spin' : ''">
+                {{ icons.base_icons('refresh', class="w-4 h-4") }}
+              </span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      {# TAB CONTENTS #}
+      <div class="flex-1 min-h-0 p-4 overflow-y-auto scrollbar-thin-dark" x-show="selectedEvent">
+        <template x-if="selectedEvent">
+          <div>
+
+            {# TAB: SUMMARY #}
+            <div x-show="tab === 'summary'" class="space-y-3">
+            <div class="grid grid-cols-1 gap-3 lg:grid-cols-2">
+              {{ details.detail_card_ip() }}
+              {{ details.detail_card_location() }}
+              {{ details.detail_card_provider() }}
+              {{ details.detail_card_timeline() }}
+            </div>
+            </div>
+
+            {# TAB: HEADERS #}
+            <div x-show="tab === 'headers'" class="space-y-4">
+              {{ details.detail_card_user_agent() }}
+              <div class="grid grid-cols-2 gap-3">
+                {{ details.detail_card_header('accept', 'emerald', 'Accept') }}
+                {{ details.detail_card_header('accept-language', 'blue', 'Accept-Language') }}
+                {{ details.detail_card_header('accept-encoding', 'purple', 'Accept-Encoding') }}
+                {{ details.detail_card_header('connection', 'amber', 'Connection') }}
+              </div>
+              {{ details.detail_card_all_headers() }}
+              <div x-data="{ showAllHeaders: false }" class="hidden"></div>
+            </div>
+
+            {# TAB: HISTORY #}
+            <div x-show="tab === 'history'">
+              {{ details.detail_card_ip_history() }}
+            </div>
+
+          </div>
+        </template>
+      </div>
+
+    </div>
+  </div>
+</template>
+
+  {# FOOTER ACTIONS (sticky) #}
+  <div class="sticky p-3 mt-3 bg-gray-700 rounded-xl">
+    <div class="flex items-center gap-3">
+
+      <div class="flex-1 min-w-0 px-3 py-2 border border-gray-800 rounded-lg bg-gray-900/40">
+        <div class="mb-1 text-[10px] uppercase tracking-wide text-gray-500">
+          Trigger URL
+        </div>
+
+        <div class="flex items-center min-w-0 gap-2">
+          <span class="text-gray-500 shrink-0">
+            {{ icons.base_icons('link', class="w-3.5 h-3.5") }}
+          </span>
+          <span class="font-mono text-xs text-gray-300 truncate"
+                x-text="triggerUrl || '—'"></span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 shrink-0">
+        <button type="button"
+                class="flex items-center justify-center text-gray-300 transition border border-gray-800 rounded-lg w-9 h-9 bg-gray-900/60 hover:bg-gray-800 hover:text-white"
+                :disabled="!triggerUrl"
+                @click="openTriggerUrl()">
+          {{ icons.base_icons('open', class="w-4 h-4") }}
+        </button>
+
+        <button type="button"
+                class="flex items-center justify-center text-gray-300 transition border border-gray-800 rounded-lg w-9 h-9 bg-gray-900/60 hover:bg-gray-800 hover:text-white"
+                :disabled="!triggerUrl"
+                @click="copyTriggerUrl()">
+          {{ icons.base_icons('copy', class="w-4 h-4") }}
+        </button>
+
+        <button type="button"
+                class="flex items-center justify-center transition border rounded-lg w-9 h-9"
+                :class="isActive
+                  ? 'border-emerald-800 bg-emerald-900/20 text-emerald-300 hover:bg-emerald-900/30'
+                  : 'border-gray-800 bg-gray-900/60 text-gray-400 hover:bg-gray-800 hover:text-white'"
+                :disabled="!tokenId"
+                @click="toggleTokenActive()"
+                :title="isActive ? 'Отключить токен' : 'Включить токен'">
+          {{ icons.base_icons('power', class="w-4 h-4") }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+{% endset %}
+
+{{ modal.default_modal("token-events-modal", "События токена", body, size="5xl") }}

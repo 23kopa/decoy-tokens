@@ -1,0 +1,122 @@
+<div class="flex min-w-0 flex-col flex-1 min-h-0 overflow-hidden rounded-3xl border border-[rgba(96,120,160,0.18)] shadow-lg"
+     x-data="{ tab: 'summary' }">
+  
+  {# TABS #}
+  <div class="sticky top-0 z-10 rounded-t-2xl">
+
+    <div class="flex items-center justify-between gap-3 section-modal-secondary">
+      <div class="min-w-0">
+        <div class="flex items-center gap-2">
+          <span class="text-sm font-semibold text-gray-200">Детали события</span>
+        </div>
+        <div class="flex items-center gap-2 mt-1.5 font-mono text-xs">
+          <span class="text-gray-500">FP:</span>
+          <span class="text-gray-400 truncate max-w-[200px]" x-text="selectedEvent?.fingerprint || '—'"></span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1 shrink-0">
+        <span class="inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-[11px] font-medium"
+              x-show="selectedEvent"
+              :class="selectedEvent ? getEventStatusColor(selectedEvent) : ''">
+          <span x-text="selectedEvent ? (selectedEvent.is_first ? 'Первый' : (selectedEvent.additional_data?.bot_info?.is_bot ? 'Бот' : 'Повтор')) : ''"></span>
+        </span>
+
+        <template x-if="selectedEvent && selectedEvent.seen_count > 1">
+          <span class="inline-flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-[11px] font-medium border-gray-700 text-gray-300">
+            <span x-text="'x' + (selectedEvent.seen_count)"></span>
+          </span>
+        </template>
+      </div>
+    </div>
+
+    {# NAV / ACTION BAR #}
+    <div class="flex items-center justify-between gap-3 px-4 py-2 border-y border-gray-700/50">
+      <div class="flex min-w-0 items-center gap-1 flex-wrap sm:flex-nowrap">
+        <button type="button"
+                @click="tab = 'summary'"
+                class="rounded-lg px-3 py-1.5 text-xs font-medium transition-all duration-200"
+                :class="tab === 'summary'
+                  ? 'bg-gray-800 text-white shadow-sm border border-gray-700'
+                  : 'text-gray-400 hover:text-gray-300 hover:bg-gray-600/50'">
+          Сводка
+        </button>
+
+        <button type="button"
+                @click="tab = 'headers'"
+                class="rounded-lg px-3 py-1.5 text-xs font-medium transition-all duration-200"
+                :class="tab === 'headers'
+                  ? 'bg-gray-800 text-white shadow-sm border border-gray-700'
+                  : 'text-gray-400 hover:text-gray-300 hover:bg-gray-600/50'">
+          Заголовки
+        </button>
+
+        <button type="button"
+                @click="tab = 'history'"
+                class="rounded-lg px-3 py-1.5 text-xs font-medium transition-all duration-200"
+                :class="tab === 'history'
+                  ? 'bg-gray-800 text-white shadow-sm border border-gray-700'
+                  : 'text-gray-400 hover:text-gray-300 hover:bg-gray-600/50'">
+          История
+        </button>
+      </div>
+
+      <div class="flex items-center gap-1 shrink-0 self-end sm:self-auto">
+        <button type="button"
+                title="Скачать JSON события"
+                class="flex items-center justify-center w-8 h-8 text-gray-400 transition-all duration-200 border rounded-lg bg-gray-900/40 border-gray-700/50 hover:bg-gray-800 hover:text-white hover:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                :disabled="!selectedEvent || buttonLoading.download"
+                @click="downloadEventWithFeedback(selectedEvent)"
+                x-loading-button="buttonLoading.download">
+          <span :class="buttonLoading.download ? 'animate-spin' : ''">
+            <template x-if="!buttonLoading.download">
+              {{ icons.base_icons('download', class="w-4 h-4") }}
+            </template>
+            <template x-if="buttonLoading.download">
+              <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+            </template>
+          </span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  {# TAB CONTENT #}
+  <div class="flex-1 min-h-0 overflow-y-auto scrollbar-thin-dark section-modal-secondary" x-show="selectedEvent">
+    <template x-if="selectedEvent">
+      <div>
+
+        {# SUMMARY TAB #}
+        <div x-show="tab === 'summary'" class="space-y-3">
+          <div class="grid grid-cols-1 gap-3 lg:grid-cols-2">
+            {% include "components/dashboard/events/general/ip_card.html" %}
+            {% include "components/dashboard/events/general/location_card.html" %}
+            {% include "components/dashboard/events/general/provider_card.html" %}
+            {% include "components/dashboard/events/general/timeline_card.html" %}
+          </div>
+        </div>
+
+        {# HEADERS TAB #}
+        <div x-show="tab === 'headers'" class="min-w-0 space-y-4">
+          {% include "components/dashboard/events/headers/user_agent_card.html" %}
+          <div class="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2">
+            {% include "components/dashboard/events/headers/accept_card.html" %}
+            {% include "components/dashboard/events/headers/accept_language_card.html" %}
+            {% include "components/dashboard/events/headers/accept_encoding_card.html" %}
+            {% include "components/dashboard/events/headers/connection_card.html" %}
+          </div>
+          {% include "components/dashboard/events/headers/all_headers_card.html" %}
+        </div>
+
+        {# HISTORY TAB #}
+        <div x-show="tab === 'history'">
+          {% include "components/dashboard/events/history/ip_history_card.html" %}
+        </div>
+
+      </div>
+    </template>
+  </div>
+</div>

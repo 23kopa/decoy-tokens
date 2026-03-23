@@ -1,0 +1,63 @@
+{% import "macros/cards/token_item.html" as cards %}
+{% import "macros/icons/base.html" as icons %}
+
+<section class="flex flex-col min-h-0 section-base lg:flex-1" x-data>
+  
+  <!-- Header -->
+  <div class="flex items-center justify-between pb-4 mb-5 border-b shrink-0 border-gray-700/40">
+      <div class="flex items-center gap-2">
+          <span class="text-lg font-semibold tracking-tight text-white">Созданные токены</span>
+      </div>
+      <a href="/home" class="flex items-center gap-1 px-3 py-1.5 text-xs text-gray-400 transition border rounded-lg border-gray-700/50 hover:bg-gray-800 hover:text-white hover:border-gray-600">
+          <span>Создать</span>
+      </a>
+  </div>
+
+  <!-- Content -->
+  <div class="flex flex-col min-h-0 lg:flex-1">
+    {% if tokens and tokens|length %}
+
+      <!-- List shell -->
+      <div class="flex flex-col min-h-0 border rounded-xl border-white/10 lg:flex-1 lg:overflow-hidden">
+        <div class="max-h-[45vh] overflow-y-auto scrollbar-thin-dark lg:max-h-none lg:flex-1 lg:min-h-0">
+          <ul class="p-3 space-y-3">
+            {% for t in token_card %}
+              <!-- Убрали li с x-data и x-init - теперь всё внутри token_item -->
+              {{ cards.token_item(t, loop.index) }}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+    {% else %}
+
+      <!-- Empty state -->
+      <div class="flex h-full items-center justify-center section-base">
+        <div class="max-w-sm text-center">
+          <div class="flex items-center justify-center w-12 h-12 mx-auto mb-3 border rounded-xl border-gray-700/50 bg-gradient-to-br from-gray-800/40 to-gray-900/60">
+            <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+            </svg>
+          </div>
+
+          <div class="text-sm text-gray-400">
+            Пока нет токенов
+          </div>
+
+          <p class="mt-1 text-xs text-gray-600">
+            Создайте первый токен, чтобы начать отслеживание событий.
+          </p>
+
+          <!--<a href="/home"
+             class="mt-5 inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-gray-300 transition hover:bg-white/10 hover:text-white">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Создать токен
+          </a>-->
+        </div>
+      </div>
+
+    {% endif %}
+  </div>
+</section>

@@ -1,0 +1,9 @@
+<div class="flex min-w-0 w-full min-h-0 flex-col lg:w-[300px] lg:min-w-[280px] lg:max-w-[300px] lg:flex-none">
+  <div class="section-modal flex min-w-0 min-h-0 flex-col overflow-hidden lg:flex-1">
+    <div class="max-h-[12dvh] min-w-0 overflow-y-auto scrollbar-thin-dark lg:flex-1 lg:min-h-0 lg:max-h-none">
+      <template x-for="event in events" :key="event.id">
+        {% include "components/dashboard/events/navigation/event_card.html" %}
+      </template>
+    </div>
+  </div>
+</div>

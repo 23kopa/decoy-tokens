@@ -1,0 +1,53 @@
+{% macro default_modal(modal_id, title, body, size="md", custom_width=None) %}
+
+{% set width_class = {
+    'sm': 'max-w-sm',
+    'md': 'max-w-md',
+    'lg': 'max-w-lg',
+    'xl': 'max-w-xl',
+    '2xl': 'max-w-2xl',
+    '3xl': 'max-w-3xl',
+    '4xl': 'max-w-4xl',
+    '5xl': 'max-w-5xl',
+    '6xl': 'max-w-6xl',
+    '7xl': 'max-w-7xl',
+    'full': 'max-w-full',
+    'custom': custom_width if custom_width else 'max-w-md'
+}.get(size, 'max-w-md') %}
+
+<div id="{{ modal_id }}"
+     tabindex="-1"
+     aria-hidden="true"
+     class="fixed inset-0 z-50 flex items-center justify-center hidden p-4 overflow-y-auto">
+
+  <div class="relative w-full {{ width_class }} z-10">
+    <div class="bg-gray-800 border rounded-xl border-gray-700/60">
+
+      <div class="flex items-center justify-between px-6 py-4 border-b border-gray-700/60">
+        <h3 class="text-lg font-semibold text-white">{{ title }}</h3>
+
+        <button type="button"
+                class="inline-flex items-center justify-center text-gray-400 bg-transparent cursor-pointer hover:text-white"
+                data-modal-hide="{{ modal_id }}">
+          <svg class="w-5 h-5"
+               aria-hidden="true"
+               xmlns="http://www.w3.org/2000/svg"
+               width="24" height="24"
+               fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18 17.94 6M18 18 6.06 6" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="p-6">
+        {{ body }}
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endmacro %}

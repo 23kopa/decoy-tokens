@@ -1,0 +1,42 @@
+{% extends "layouts/private.html" %}
+
+{% block title %}Токены{% endblock %}
+
+{% block private_body %}
+  <div class="page-component flex flex-1 min-h-0 flex-col overflow-hidden px-5 py-5 sm:px-6">
+
+      <div class="shrink-0">
+        {% include "partials/headers/home_header.html" %}
+      </div>
+
+      <div class="shrink-0">
+        {% include "components/home/page/help_steps.html" %}
+      </div>
+
+      <div class="flex-1 min-h-0">
+        {% include "components/home/page/tokens_store.html" %}
+      </div>
+
+  </div>
+{% endblock %}
+
+{% block private_overlays %}
+    {% set modals = [
+        {"id": "link", "type": "link"},
+        {"id": "email", "type": "email"},
+        {"id": "qr", "type": "file"},
+        {"id": "dns", "type": "dns"},
+        {"id": "image", "type": "image"},
+        {"id": "word", "type": "word"}
+    ] %}
+    
+    {% for modal in modals %}
+        {% with 
+            modal_id=modal.id,
+            title=modal.title,
+            token_type=modal.type
+        %}
+            {% include "modals/token/create_token.html" %}
+        {% endwith %}
+    {% endfor %}
+{% endblock %}

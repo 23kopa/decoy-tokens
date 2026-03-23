@@ -1,0 +1,47 @@
+<section class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-12">
+    {# Верхняя строка #}
+    <div class="flex flex-col items-center gap-4 text-center">
+      <div class="min-w-0 flex flex-col items-center text-center">
+        <div class="inline-flex items-center gap-2 rounded-full border border-gray-700/60 bg-gray-800/70 px-3 py-1.5 text-sm font-medium tracking-wide text-gray-300">
+          <span class="relative flex w-2 h-2">
+            <span class="absolute inline-flex w-full h-full rounded-full opacity-75 animate-ping bg-emerald-400"></span>
+            <span class="relative inline-flex w-2 h-2 rounded-full bg-emerald-500"></span>
+          </span>
+          <span class="text-white">TokenGuard</span>
+          <span class="text-blue-400">v1.0</span>
+        </div>
+
+        {#<div class="mt-6 text-[11px] font-medium tracking-[0.18em] text-blue-300 uppercase">
+          Система раннего обнаружения
+        </div>#}
+
+        <h1 class="mt-5 max-w-3xl mx-auto text-5xl font-semibold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
+          Раннее обнаружение
+          <span class="text-blue-400">вторжений</span>
+        </h1>
+
+        <p class="mt-5 max-w-3xl text-md leading-6 text-gray-400 sm:text-base sm:leading-7">
+          Размещайте цифровые ловушки, отслеживайте активации и получайте события
+          в едином интерфейсе.
+        </p>
+      </div>
+    </div>
+
+    {# Кнопка действия #}
+<div class="flex justify-center pt-6">
+  <div class="relative">
+    
+    <div class="absolute inset-0 rounded-xl bg-blue-500/20 blur-xl"></div>
+
+    <div class="relative">
+      {{ buttons.modal_button(
+        "Начать",
+        "login",
+        variant="hero",
+        size="lg"
+      ) }}
+    </div>
+
+  </div>
+</div>
+</section>

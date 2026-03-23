@@ -1,0 +1,171 @@
+{% extends "layouts/private.html" %}
+{% import "components/macros/icons.html" as icons %}
+{% import "components/macros/cards/preview.html" as cards %}
+
+{% block title %}Токены{% endblock %}
+
+{% block private_body %}
+
+{# PAGE HEADER #}
+<div class="pb-4 mb-6 border-b border-gray-800">
+    <h1 class="text-3xl font-bold text-white sm:text-4xl">Токены</h1>
+    <p class="mt-2 text-gray-400">
+        Создавайте скрытые токены и отслеживайте срабатывания.
+    </p>
+</div>
+
+{# HELP SECTION #}
+<section class="p-4 mb-4 bg-gray-800 rounded-xl">
+
+    <div class="gap-4 mb-4 font-semibold text-white">Как это работает?</div>
+
+    <div class="grid grid-cols-1 gap-3 sm:grid-cols-1 lg:grid-cols-3">
+
+        {# STEP 1 #}
+        <div class="p-4 border border-gray-700 rounded-xl">
+            <div class="flex items-center gap-3">
+                <div class="flex items-center justify-center text-gray-400 bg-gray-700 rounded-full h-9 w-9">
+                    1
+                </div>
+                <div>
+                    <div class="font-semibold text-white">Создать</div>
+                    <div class="text-sm text-gray-400">
+                        Выберите тип токена, задайте параметры.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# STEP 2 #}
+        <div class="p-4 border border-gray-700 rounded-xl">
+            <div class="flex items-center gap-3">
+                <div class="flex items-center justify-center text-gray-400 bg-gray-700 rounded-full h-9 w-9">
+                    2
+                </div>
+                <div>
+                    <div class="font-semibold text-white">Разместить</div>
+                    <div class="text-sm text-gray-400">
+                        Вставьте токен в нужный ресурс.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# STEP 3 #}
+        <div class="p-4 border border-gray-700 rounded-xl">
+            <div class="flex items-center gap-3">
+                <div class="flex items-center justify-center text-gray-400 bg-gray-700 rounded-full h-9 w-9">
+                    3
+                </div>
+                <div>
+                    <div class="font-semibold text-white">Событие</div>
+                    <div class="text-sm text-gray-400">
+                        При активации токена получите событие.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{# TOKEN TYPES SECTION #}
+<section class="p-4 mb-4 bg-gray-800 rounded-xl">
+
+    {# TOKEN TYPES HEADER #}
+    <div class="flex items-center justify-between mb-4">
+        <div class="font-semibold text-white">Выберите тип токена</div>
+        <a href="/dashboard"
+        class="text-sm text-gray-500">
+            Мои токены
+        </a>
+    </div>
+
+    {# TOKEN TYPES GRID #}
+    <div class="grid grid-cols-1 gap-4 mt-3 sm:grid-cols-2 lg:grid-cols-2">
+      
+        {{ cards.token_type(
+          title="Link-токен",
+          description="Генерирует уникальную URL-ссылку для отслеживания открытий и метаданных.",
+          icon=icons.type_icons("link"),
+          modal_id="link",
+          token_type="link"
+        ) }}
+
+        {{ cards.token_type(
+          title="Email-токен",
+          description="Трекинг открытия письма/пикселя и базовая атрибуция клиента.",
+          icon=icons.type_icons("email"),
+          modal_id="email",
+          token_type="email"
+        ) }}
+
+        {{ cards.token_type(
+          title="QR-токен",
+          description="Отдаёт файл и фиксирует факт скачивания/открытия (в зависимости от механики).",
+          icon=icons.type_icons("qr"),
+          modal_id="qr",
+          token_type="file"
+        ) }}
+
+        {{ cards.token_type(
+          title="DNS-токен",
+          description="Маркер для интеграций и контроля утечек через запросы к endpoint.",
+          icon=icons.type_icons("dns"),
+          modal_id="dns",
+          token_type="dns"
+        ) }}
+
+        {{ cards.token_type(
+          title="Image-токен",
+          description="Встраиваемый image beacon для фиксации открытия/загрузки.",
+          icon=icons.type_icons("image"),
+          modal_id="image",
+          token_type="image"
+        ) }}
+
+        {{ cards.token_type(
+          title="Word-токен",
+          description="Документ-приманка с трекингом открытия/доступа.",
+          icon=icons.type_icons("word"),
+          modal_id="word",
+          token_type="word"
+        ) }}
+    </div>
+
+    {# FOOTNOTE / USAGE HINT #}
+    <div class="mt-3 text-xs text-gray-500">
+        Нажмите на тип токена → заполните настройки → получите итоговый токен.
+    </div>
+</section>
+
+<section class="flex-1 min-h-0">
+    <div class="h-full p-4 bg-gray-800 rounded-xl">
+        <h2 class="pb-2 mb-3 font-semibold text-white border-b border-gray-700">Советы</h2>
+        <ul class="pl-5 space-y-1 text-sm text-gray-400 list-disc list-inside">
+            <li>Создавайте отдельный токен под каждый канал/ресурс — так проще атрибутировать.</li>
+            <li>Не редактируйте токен вручную после генерации.</li>
+            <li>Для внутренних документов используйте Word/Image токены для “тихого” трекинга.</li>
+        </ul>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block private_overlays %}
+  {% set modals = [
+    {"id": "link", "title": "Создать Link-токен", "type": "link"},
+    {"id": "email", "title": "Создать Emaidil-токен", "type": "email"},
+    {"id": "qr", "title": "Создать QR/File-токен", "type": "file"},
+    {"id": "dns", "title": "Создать DNS-токен", "type": "dns"},
+    {"id": "image", "title": "Создать Image-токен", "type": "image"},
+    {"id": "word", "title": "Создать Word-токен", "type": "word"}
+  ] %}
+  
+  {% for modal in modals %}
+    {% set modal_id = modal.id %}
+    {% set title = modal.title %}
+    {% set token_type = modal.type %}
+    {% include "components/modals/home/create_token.html" %}
+  {% endfor %}
+{% endblock %}

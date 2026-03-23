@@ -1,0 +1,33 @@
+{% import "macros/ui/modal.html" as modal %}
+{% import "macros/ui/buttons.html" as buttons %}
+{% import "macros/icons/base.html" as icons %}
+
+{% set body %}
+<div x-data="tokenEvents()"
+     class="relative flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden">
+
+  <div class="shrink-0">
+    {% include "partials/modals/events/header.html" %}
+  </div>
+
+  <template x-if="!loading && events.length === 0">
+    <div class="flex-1 min-h-0 overflow-y-auto">
+      {% include "partials/modals/events/empty.html" %}
+    </div>
+  </template>
+
+  <template x-if="loading || events.length > 0">
+    <div class="flex flex-1 min-h-0 flex-col gap-3 overflow-hidden lg:flex-row">
+      {% include "partials/modals/events/events.html" %}
+      {% include "partials/modals/events/details.html" %}
+    </div>
+  </template>
+
+  <div class="shrink-0">
+    {% include "partials/modals/events/footer.html" %}
+  </div>
+
+</div>
+{% endset %}
+
+{{ modal.default_modal("token-events-modal", "События токена", body, size="5xl") }}

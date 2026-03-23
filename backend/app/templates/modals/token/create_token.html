@@ -1,0 +1,32 @@
+{% import "macros/ui/modal.html" as modal %}
+{% import "macros/ui/forms.html" as forms %}
+{% import "macros/ui/fields.html" as fields %}
+{% import "macros/ui/buttons.html" as buttons %}
+
+{% set title = "Создание токена" %}
+
+{% set body %}
+<div x-data="tokenCreate('{{ token_type }}', '{{ modal_id }}', false)"
+     x-init="init(); setView('create')"
+     class="relative flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden">
+
+  <div class="flex-1 min-h-0 overflow-y-auto">
+
+    <div x-show="view === 'create'" x-cloak>
+      {% include "partials/modals/tokens/create_state.html" %}
+    </div>
+
+    <div x-show="view === 'progress'" x-cloak>
+      {% include "partials/modals/tokens/progress_state.html" %}
+    </div>
+
+    <div x-show="view === 'result'" x-cloak>
+      {% include "partials/modals/tokens/result_state.html" %}
+    </div>
+
+  </div>
+
+</div>
+{% endset %}
+
+{{ modal.default_modal(modal_id, title, body, size="lg") }}

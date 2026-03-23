@@ -1,0 +1,27 @@
+@layer components {
+
+  .card-base {
+    border: var(--card-border);
+    background-image: var(--card-gradient);
+    box-shadow: var(--card-shadow);
+    border-radius: var(--card-radius);
+  }
+  
+  .card-hover {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+  
+  .card-hover:hover {
+    border-color: rgba(107, 114, 128, 0.6);
+    background-image: linear-gradient(to bottom right, rgba(31, 41, 55, 0.6), rgba(55, 65, 81, 0.4));
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  }
+  
+  .card-active {
+    border-color: rgba(99, 102, 241, 0.5);
+    background-image: linear-gradient(to bottom right, rgba(49, 46, 129, 0.3), rgba(76, 29, 149, 0.2));
+  }
+
+}

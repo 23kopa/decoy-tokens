@@ -1,0 +1,47 @@
+{# FOOTER ACTIONS (sticky) #}
+<div class="sticky p-3 mt-3 bg-gray-700 rounded-xl">
+  <div class="flex items-center gap-3">
+
+    <div class="flex-1 min-w-0 px-3 py-2 border border-gray-800 rounded-lg bg-gray-900/40">
+      <div class="mb-1 text-[10px] uppercase tracking-wide text-gray-500">
+        Trigger URL
+      </div>
+
+      <div class="flex items-center min-w-0 gap-2">
+        <span class="text-gray-500 shrink-0">
+          {{ icons.base_icons('link', class="w-3.5 h-3.5") }}
+        </span>
+        <span class="font-mono text-xs text-gray-300 truncate"
+              x-text="triggerUrl || '—'"></span>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2 shrink-0">
+      <button type="button"
+              class="flex items-center justify-center text-gray-300 transition border border-gray-800 rounded-lg w-9 h-9 bg-gray-900/60 hover:bg-gray-800 hover:text-white"
+              :disabled="!triggerUrl"
+              @click="openTriggerUrl()">
+        {{ icons.base_icons('open', class="w-4 h-4") }}
+      </button>
+
+      <button type="button"
+              class="flex items-center justify-center text-gray-300 transition border border-gray-800 rounded-lg w-9 h-9 bg-gray-900/60 hover:bg-gray-800 hover:text-white"
+              :disabled="!triggerUrl"
+              @click="copyTriggerUrl()">
+        {{ icons.base_icons('copy', class="w-4 h-4") }}
+      </button>
+
+      <button type="button"
+              class="flex items-center justify-center transition border rounded-lg w-9 h-9"
+              :class="isActive
+                ? 'border-emerald-800 bg-emerald-900/20 text-emerald-300 hover:bg-emerald-900/30'
+                : 'border-gray-800 bg-gray-900/60 text-gray-400 hover:bg-gray-800 hover:text-white'"
+              :disabled="!tokenId"
+              @click="toggleTokenActive()"
+              :title="isActive ? 'Отключить токен' : 'Включить токен'">
+        {{ icons.base_icons('power', class="w-4 h-4") }}
+      </button>
+    </div>
+
+  </div>
+</div>

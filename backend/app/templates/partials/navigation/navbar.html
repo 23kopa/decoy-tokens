@@ -1,0 +1,221 @@
+<header class="sticky top-0 z-40 antialiased">
+  <nav class="px-5 py-3 mx-3 mt-3 page-component">
+
+    <div class="relative flex items-center justify-between gap-4">
+
+      {# LEFT - Logo #}
+      <div class="flex items-center min-w-0 gap-3">
+        <a href="/home" class="flex items-center min-w-0 gap-3">
+          <div class="flex items-center justify-center border shadow-sm h-9 w-9 shrink-0 rounded-xl border-cyan-500/20 bg-cyan-500/10 text-cyan-300">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 3l7 4v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V7l7-4z"/>
+            </svg>
+          </div>
+
+          <div class="min-w-0">
+            <div class="text-sm font-semibold tracking-wide text-white truncate sm:text-base">
+              TokenGuard
+            </div>
+            <div class="hidden text-[11px] text-gray-400 sm:block">
+              Раннее обнаружение вторжений
+            </div>
+          </div>
+        </a>
+      </div>
+
+      {# CENTER - Desktop Navigation #}
+      <div class="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center gap-1 px-1 py-1 border rounded-2xl border-gray-700/40 bg-gray-900/30">
+        <a
+          href="/home"
+          class="px-4 py-1.5 text-sm font-medium transition-all duration-200 rounded-xl
+                 {% if request.path == '/home' %}
+                   text-cyan-300 bg-cyan-500/10 border border-cyan-500/20
+                 {% else %}
+                   text-gray-400 hover:text-white hover:bg-gray-800/60
+                 {% endif %}"
+        >
+          <span class="flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 3l7 4v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V7l7-4z"/>
+            </svg>
+            Токены
+          </span>
+        </a>
+        
+        <a
+          href="/dashboard"
+          class="px-4 py-1.5 text-sm font-medium transition-all duration-200 rounded-xl
+                 {% if request.path == '/dashboard' %}
+                   text-cyan-300 bg-cyan-500/10 border border-cyan-500/20
+                 {% else %}
+                   text-gray-400 hover:text-white hover:bg-gray-800/60
+                 {% endif %}"
+        >
+          <span class="flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 20h16M6 16v-4M10 16V8M14 16V6M18 16v-2"/>
+                    </svg>
+            Статистика
+          </span>
+        </a>
+      </div>
+
+      {# RIGHT - User menu #}
+      <div class="flex items-center gap-2 shrink-0">
+
+        {# USER INFO - Desktop #}
+        <div class="items-center hidden h-10 gap-3 px-3 border sm:flex rounded-xl border-gray-700/40 bg-gray-900/40">
+          <div class="min-w-0 text-right">
+            <div class="max-w-[140px] truncate text-xs font-medium text-gray-200">
+              {{ user.username }}
+            </div>
+            <div class="max-w-[140px] truncate text-[11px] text-gray-500">
+              {{ user.email }}
+            </div>
+          </div>
+
+          <div class="flex items-center justify-center w-6 h-6 text-xs font-semibold text-white border shadow-sm shrink-0 rounded-lg border-gray-600/50 bg-gradient-to-br from-gray-700 to-gray-800">
+            {{ (user.username[:1] if user and user.username else "U")|upper }}
+          </div>
+        </div>
+
+        {# LANGUAGE #}
+        {#<button
+          type="button"
+          class="flex items-center justify-center w-10 h-10 text-gray-400 transition-all duration-200 border group rounded-xl border-gray-700/40 bg-gray-900/40 hover:border-gray-600/60 hover:bg-gray-800/60 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-600/70"
+          title="Сменить язык"
+          aria-label="Сменить язык"
+        >
+          <svg class="w-4 h-4 transition-transform duration-200 group-hover:scale-105" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 5h12M9 3v2m1.5 0A17 17 0 017 12m4.5-7A17 17 0 0015 12m-8 0h8m-8 0l-2 7m2-7l2 7m6-10h5m-2.5 0v10m0 0l-2-2m2 2l2-2"/>
+          </svg>
+        </button>#}
+
+        {# THEME #}
+        {#<button
+          type="button"
+          class="flex items-center justify-center w-10 h-10 text-gray-400 transition-all duration-200 border group rounded-xl border-gray-700/40 bg-gray-900/40 hover:border-gray-600/60 hover:bg-gray-800/60 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-600/70"
+          title="Сменить тему"
+          aria-label="Сменить тему"
+        >
+          <svg class="w-4 h-4 transition-transform duration-200 group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 12.79A9 9 0 1111.21 3c0 .34.02.67.05 1A7 7 0 0020 13c.33.03.66.05 1 .05z"/>
+          </svg>
+        </button>#}
+
+        {# MOBILE MENU TOGGLE - Checkbox + Label #}
+        <div class="relative md:hidden">
+          <input type="checkbox" id="mobile-menu-toggle" class="hidden peer">
+          <label for="mobile-menu-toggle" 
+                 class="flex items-center justify-center w-10 h-10 text-gray-400 transition-all duration-200 border cursor-pointer group rounded-xl border-gray-700/40 bg-gray-900/40 hover:border-gray-600/60 hover:bg-gray-800/60 hover:text-white peer-checked:text-white peer-checked:border-cyan-500/30 peer-checked:bg-cyan-500/10"
+                 title="Меню"
+                 aria-label="Открыть меню">
+            {# Бургер иконка (видна когда меню закрыто) #}
+            <svg class="w-5 h-5 transition-transform duration-200 group-hover:scale-105 peer-checked:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+            {# Крестик (виден когда меню открыто) #}
+            <svg class="hidden w-5 h-5 transition-transform duration-200 peer-checked:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </label>
+
+          {# MOBILE MENU DROPDOWN - появляется когда чекбокс отмечен #}
+          <div class="fixed left-0 right-0 hidden px-5 mt-2 peer-checked:block" style="top: 5rem;">
+            <div class="overflow-hidden border rounded-2xl border-gray-700/40 bg-gray-900/95 backdrop-blur-sm shadow-2xl">
+              
+              {# Mobile User Info #}
+              <div class="p-4 border-b border-gray-700/40">
+                <div class="flex items-center gap-3">
+                  <div class="flex items-center justify-center w-10 h-10 text-sm font-semibold text-white border shadow-sm shrink-0 rounded-xl border-gray-600/50 bg-gradient-to-br from-gray-700 to-gray-800">
+                    {{ (user.username[:1] if user and user.username else "U")|upper }}
+                  </div>
+                  <div class="min-w-0">
+                    <div class="font-medium text-white truncate">
+                      {{ user.username }}
+                    </div>
+                    <div class="text-xs text-gray-400 truncate">
+                      {{ user.email }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {# Mobile Navigation Links #}
+              <div class="p-2">
+                <a href="/home"
+                   class="flex items-center gap-3 px-3 py-3 text-sm font-medium transition-all duration-200 rounded-xl
+                          {% if request.path == '/home' %}
+                            text-cyan-300 bg-cyan-500/10
+                          {% else %}
+                            text-gray-400 hover:text-white hover:bg-gray-800/60
+                          {% endif %}">
+                  <span class="flex items-center justify-center w-6 h-6">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 3l7 4v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V7l7-4z"/>
+                    </svg>
+                  </span>
+                  <span>Токены</span>
+                </a>
+                
+                <a href="/dashboard"
+                   class="flex items-center gap-3 px-3 py-3 text-sm font-medium transition-all duration-200 rounded-xl
+                          {% if request.path == '/dashboard' %}
+                            text-cyan-300 bg-cyan-500/10
+                          {% else %}
+                            text-gray-400 hover:text-white hover:bg-gray-800/60
+                          {% endif %}">
+                  <span class="flex items-center justify-center w-6 h-6">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 20h16M6 16v-4M10 16V8M14 16V6M18 16v-2"/>
+                    </svg>
+                  </span>
+                  <span>Статистика</span>
+                </a>
+
+                {# Optional separator #}
+                {# <div class="my-2 border-t border-gray-700/40"></div> #}
+
+                {# Language option (commented out) #}
+                {#<button class="flex items-center w-full gap-3 px-3 py-3 text-sm font-medium text-gray-400 transition-all duration-200 rounded-xl hover:text-white hover:bg-gray-800/60">
+                  <span class="flex items-center justify-center w-6 h-6">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 5h12M9 3v2m1.5 0A17 17 0 017 12m4.5-7A17 17 0 0015 12m-8 0h8m-8 0l-2 7m2-7l2 7m6-10h5m-2.5 0v10m0 0l-2-2m2 2l2-2"/>
+                    </svg>
+                  </span>
+                  <span>Русский</span>
+                </button>#}
+
+                {# Theme option #}
+                {#<button class="flex items-center w-full gap-3 px-3 py-3 text-sm font-medium text-gray-400 transition-all duration-200 rounded-xl hover:text-white hover:bg-gray-800/60">
+                  <span class="flex items-center justify-center w-6 h-6">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 12.79A9 9 0 1111.21 3c0 .34.02.67.05 1A7 7 0 0020 13c.33.03.66.05 1 .05z"/>
+                    </svg>
+                  </span>
+                  <span>Тема</span>
+                </button>#}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {# LOGOUT #}
+        <form action="/auth/logout" method="post">
+          <button
+            type="submit"
+            class="flex items-center justify-center w-10 h-10 text-red-300 transition-all duration-200 border group rounded-xl border-red-500/20 bg-red-500/5 hover:border-red-500/30 hover:bg-red-500/10 hover:text-red-200 focus:outline-none focus:ring-2 focus:ring-red-500/20"
+            title="Выйти"
+            aria-label="Выйти"
+          >
+            <svg class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17 16l4-4m0 0l-4-4m4 4H9"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 20H6a2 2 0 01-2-2V6a2 2 0 012-2h7"/>
+            </svg>
+          </button>
+        </form>
+
+      </div>
+    </div>
+  </nav>
+</header>

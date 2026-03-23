@@ -1,0 +1,154 @@
+{% macro type_icons(name, class="w-5 h-5") %}
+  {% set base_class = class %}
+
+  {% if name == "link" %}
+    <svg class="{{ base_class }}" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M13.828 10.172a4 4 0 010 5.656l-3 3a4 4 0 01-5.656-5.656l1.5-1.5m5.656-5.656a4 4 0 015.656 5.656l-1.5 1.5" />
+    </svg>
+
+  {% elif name == "email" %}
+    <svg class="{{ base_class }}" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25H4.5A2.25 2.25 0 012.25 17.25V6.75m19.5 0L12 13.5 2.25 6.75m19.5 0A2.25 2.25 0 0019.5 4.5H4.5A2.25 2.25 0 002.25 6.75" />
+    </svg>
+
+  {% elif name == "qr" %}
+    <svg class="{{ base_class }}" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M4.5 4.5h6v6h-6v-6zm9 0h6v6h-6v-6zm-9 9h6v6h-6v-6zm9 3h3m0 0v3m0-3h-3" />
+    </svg>
+
+  {% elif name == "dns" %}
+    <svg class="{{ base_class }}" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M3 6h18M3 12h18M3 18h18" />
+    </svg>
+
+  {% elif name == "image" %}
+    <svg class="{{ base_class }}" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M3 16.5V6.75A2.25 2.25 0 015.25 4.5h13.5A2.25 2.25 0 0121 6.75V16.5M3 16.5l4.5-4.5a2.25 2.25 0 013.182 0L15 16.5M3 16.5h18" />
+    </svg>
+
+  {% elif name == "word" %}
+    <svg class="{{ base_class }}" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M6.75 3h7.5l3 3v15H6.75A2.25 2.25 0 014.5 18.75V5.25A2.25 2.25 0 016.75 3zM14.25 3v3h3" />
+    </svg>
+  {% endif %}
+{% endmacro %}
+
+{% macro base_icons(name, class="w-5 h-5") %}
+  {% set base_class = class %}
+
+  {% if name == "file" %}
+    <svg class="{{ base_class }}" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+    </svg>
+
+  {% elif name == "clock" %}
+    <svg class="{{ base_class }}" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+
+  {% elif name == "tag" %}
+    <svg class="{{ base_class }}" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
+    </svg>
+
+  {% elif name == "stats" %}
+    <svg class="{{ base_class }}" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+    </svg>
+
+  {% elif name == "open" %}
+    <svg class="{{ base_class }}" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+    </svg>
+
+  {% elif name == "copy" %}
+    <svg class="{{ base_class }}" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
+    </svg>
+
+  {% elif name == "status" %}
+    <svg class="{{ base_class }}" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+
+  {% elif name == "trash" %}
+    <svg class="{{ base_class }}" fill="none" stroke="currentColor" stroke-width="1.5"
+        viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M6 7.5h12m-10.5 0v10.125c0 .621.504 1.125 1.125 1.125h6.75c.621 0 1.125-.504 1.125-1.125V7.5m-7.5 0V5.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V7.5" />
+    </svg>
+
+  {% elif name == "download" %}
+    <svg class="{{ base_class }}" fill="none" stroke="currentColor" stroke-width="1.5"
+        viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M12 3v12m0 0l4.5-4.5M12 15l-4.5-4.5M4.5 16.5v1.125C4.5 18.246 5.004 18.75 5.625 18.75h12.75c.621 0 1.125-.504 1.125-1.125V16.5" />
+    </svg>
+
+  {% elif name == "refresh" %}
+    <svg class="{{ base_class }}" fill="none" stroke="currentColor" stroke-width="1.5"
+        viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M20 11a8 8 0 00-14.9-4M4 5v4h4M4 13a8 8 0 0014.9 4M20 19v-4h-4" />
+    </svg>
+
+  {% elif name == "power" %}
+    <svg class="{{ base_class }}" fill="none" stroke="currentColor" stroke-width="1.5"
+        viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M12 2.75v8.5m5.126-5.126a7.25 7.25 0 11-10.252 0" />
+    </svg>
+
+  {% endif %}
+{% endmacro %}
+
+{% macro chevron_indicator(direction="right", class="w-5 h-5") %}
+  {% set base_class = class ~ " text-gray-500 transition-all duration-200 group-hover:text-white" %}
+
+  {% if direction == "right" %}
+    <svg class="{{ base_class }} group-hover:translate-x-0.5"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 5l7 7-7 7"/>
+    </svg>
+  {% elif direction == "down" %}
+    <svg class="{{ base_class }} group-open:rotate-180"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M19 9l-7 7-7-7"/>
+    </svg>
+  {% endif %}
+{% endmacro %}
