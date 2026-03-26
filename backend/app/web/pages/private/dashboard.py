@@ -83,4 +83,8 @@ async def dashboard(
         "unique_ips": unique_ips,
     }
 
-    return templates.TemplateResponse("pages/dashboard.html", context)
+    return templates.TemplateResponse(
+        request=request,
+        name="pages/dashboard.html",
+        context=context,
+    )

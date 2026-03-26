@@ -23,4 +23,8 @@ async def home_page(
         "token_types": ["link", "email", "file", "dns", "image", "word"]
     }
 
-    return templates.TemplateResponse("pages/home.html", context)
+    return templates.TemplateResponse(
+        request=request,
+        name="pages/home.html",
+        context=context,
+    )

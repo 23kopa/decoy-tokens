@@ -1,0 +1,30 @@
+<div class="flex min-h-0 flex-col overflow-hidden p-4 component-modal">
+  <div class="flex items-center gap-2 mb-3 shrink-0">
+    <div class="flex items-center justify-center border rounded-lg w-7 h-7 bg-purple-500/10 border-purple-500/20 shrink-0">
+      <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+      </svg>
+    </div>
+
+    <div class="text-xs font-medium tracking-wider text-gray-400 uppercase">
+      Сырые заголовки
+    </div>
+  </div>
+
+  <div class="flex flex-1 min-h-0 flex-col border-t border-gray-600/50 pt-3">
+    <template x-if="!selectedEvent?.current_headers || Object.keys(selectedEvent.current_headers).length === 0">
+      <div class="text-sm italic text-gray-500">—</div>
+    </template>
+
+    <template x-if="selectedEvent?.current_headers && Object.keys(selectedEvent.current_headers).length > 0">
+      <div class="flex flex-1 min-h-0 flex-col">
+        <div class="flex-1 min-h-0 rounded-lg border border-gray-700/30 bg-gray-900/30 p-3 font-mono text-sm text-gray-200 break-all">
+          <template x-for="(value, key) in selectedEvent.current_headers" :key="key">
+            <div><span class="text-blue-400" x-text="key"></span>: <span x-text="value"></span></div>
+          </template>
+        </div>
+      </div>
+    </template>
+  </div>
+</div>

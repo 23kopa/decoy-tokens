@@ -1,0 +1,138 @@
+<div class="flex flex-col p-4 component-modal" x-data="{ openHistoryIndex: null }">
+  <div class="flex items-center gap-2 mb-3">
+    <div class="flex items-center justify-center border rounded-lg w-7 h-7 bg-blue-500/10 border-blue-500/20">
+      <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+      </svg>
+    </div>
+
+    <div class="flex items-center gap-2 min-w-0">
+      <div class="text-xs font-medium tracking-wider text-gray-400 uppercase">
+        История обращений
+      </div>
+
+      <template x-if="selectedEvent?.ip_history && selectedEvent.ip_history.length > 0">
+        <span class="text-xs text-gray-500"
+              x-text="new Set((selectedEvent.ip_history || []).map(entry => entry.ip).filter(Boolean)).size + ' уник. IP'"></span>
+      </template>
+    </div>
+  </div>
+
+  <div class="pt-3 border-t border-gray-600/50">
+    <template x-if="selectedEvent.ip_history && selectedEvent.ip_history.length > 0">
+      <div class="space-y-2">
+        <template x-for="(entry, idx) in selectedEvent.ip_history.slice().reverse()" :key="idx">
+          <div class="overflow-hidden border rounded-lg border-gray-700/50 bg-gray-900/30">
+            <button type="button"
+                    class="flex w-full items-center justify-between gap-3 px-3 py-2 text-left transition hover:bg-gray-800/30"
+                    @click="openHistoryIndex = openHistoryIndex === idx ? null : idx">
+              <div class="min-w-0">
+                <div class="font-mono text-sm text-white truncate"
+                     x-text="entry.ip || '—'"></div>
+
+                <div class="mt-1 text-xs text-gray-500">
+                  <span x-text="formatDate(entry.timestamp)"></span>
+
+                  <template x-if="entry.geo?.city || entry.geo?.country || entry.connection_type">
+                    <span>
+                      <span class="mx-1">·</span>
+                      <span x-text="[
+                        entry.geo?.city,
+                        entry.geo?.country || entry.geo?.country_code,
+                        entry.connection_type
+                      ].filter(Boolean).join(', ')"></span>
+                    </span>
+                  </template>
+                </div>
+              </div>
+
+              <div class="shrink-0 text-gray-500">
+                <svg class="w-4 h-4 transition-transform duration-200"
+                     :class="openHistoryIndex === idx ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </div>
+            </button>
+
+            <div x-show="openHistoryIndex === idx"
+                 x-collapse
+                 class="px-3 py-3 border-t border-gray-700/30">
+              <div class="space-y-2 text-xs">
+                <div class="flex items-center justify-between gap-3 text-gray-400">
+                  <span>IP адрес</span>
+                  <span class="font-mono text-gray-200 text-right break-all"
+                        x-text="entry.ip || '—'"></span>
+                </div>
+
+                <div class="flex items-center justify-between gap-3 text-gray-400">
+                  <span>Время</span>
+                  <span class="text-gray-200 text-right"
+                        x-text="formatDate(entry.timestamp)"></span>
+                </div>
+
+                <div class="flex items-center justify-between gap-3 text-gray-400"
+                     x-show="entry.geo?.city || entry.geo?.country || entry.geo?.country_code">
+                  <span>Локация</span>
+                  <span class="text-gray-200 text-right"
+                        x-text="[entry.geo?.city, entry.geo?.country || entry.geo?.country_code].filter(Boolean).join(', ') || '—'"></span>
+                </div>
+
+                <div class="flex items-center justify-between gap-3 text-gray-400"
+                     x-show="entry.org">
+                  <span>Провайдер</span>
+                  <span class="text-gray-200 text-right break-all"
+                        x-text="entry.org"></span>
+                </div>
+
+                <div class="flex items-center justify-between gap-3 text-gray-400"
+                     x-show="entry.connection_type">
+                  <span>Тип</span>
+                  <span class="font-mono text-gray-200 text-right"
+                        x-text="entry.connection_type"></span>
+                </div>
+
+                <div class="flex items-center justify-between gap-3 text-gray-400"
+                     x-show="entry.ip_version">
+                  <span>Версия IP</span>
+                  <span class="font-mono text-gray-200 text-right"
+                        x-text="entry.ip_version"></span>
+                </div>
+
+                <div class="flex items-center justify-between gap-3 text-gray-400"
+                     x-show="entry.asn">
+                  <span>ASN</span>
+                  <span class="font-mono text-gray-200 text-right"
+                        x-text="'AS' + entry.asn"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </template>
+
+    <template x-if="!selectedEvent.ip_history || selectedEvent.ip_history.length === 0">
+      <div class="flex flex-col items-center justify-center py-12 text-center section-modal">
+        <div class="flex items-center justify-center w-16 h-16 mb-4 border rounded-2xl border-gray-700/50 bg-gradient-to-br from-gray-800/40 to-gray-900/60">
+          <svg class="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+          </svg>
+        </div>
+
+        <div class="max-w-sm">
+          <h4 class="mb-2 text-sm font-semibold text-gray-300">
+            История IP адресов отсутствует
+          </h4>
+          <p class="text-xs leading-relaxed text-gray-500">
+            Для этого события пока нет записей об изменении IP адресов.<br>
+            История появляется при повторных обращениях с разных IP, но с одним fingerprint.
+          </p>
+        </div>
+      </div>
+    </template>
+  </div>
+</div>

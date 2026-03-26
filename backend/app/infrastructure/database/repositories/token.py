@@ -18,6 +18,10 @@ class TokenRepository(BaseRepository[Token]):
         )
         return self.session.scalar(stmt)
 
+    def get_by_slug(self, slug: str) -> Optional[Token]:
+        stmt = select(Token).where(Token.slug == slug)
+        return self.session.scalar(stmt)
+
     def get_all_by_user(
         self, 
         owner_user_id: int,

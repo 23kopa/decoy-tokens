@@ -1,11 +1,13 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from jinja2 import Environment, FileSystemLoader
 
 from .core.config import settings
 from .web import register_web_routes
 
 from .web.core.middlewares import setup_session_middleware
+from backend.app.web.core.middlewares.test_headers import TestHeadersMiddleware
 
 from backend.app.infrastructure.database.engine import engine, Base
 from backend.app.infrastructure.database import models
@@ -19,6 +21,7 @@ def create_app() -> FastAPI:
     )
 
     setup_session_middleware(app)
+    app.add_middleware(TestHeadersMiddleware)
 
     app.mount(
         "/static",
@@ -26,9 +29,15 @@ def create_app() -> FastAPI:
         name="static",
     )
 
+    jinja_env = Environment(
+        loader=FileSystemLoader(str(settings.TEMPLATES_DIR)),
+        autoescape=True,
+        cache_size=0  # ОТКЛЮЧАЕМ КЭШ НАХУЙ
+    )
+
     # Base.metadata.create_all(bind=engine)
 
-    templates = Jinja2Templates(directory=str(settings.TEMPLATES_DIR))
+    templates = Jinja2Templates(env=jinja_env)
 
     app.state.templates = templates
 

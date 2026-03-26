@@ -1,0 +1,14 @@
+{% macro event_card(title, icon_html, body) %}
+<div class="flex flex-col h-full p-4 component-modal">
+  <div class="flex items-center gap-2 mb-3">
+    <div class="flex items-center justify-center border rounded-lg w-7 h-7 shrink-0">
+      {{ icon_html | safe }}
+    </div>
+    <div class="text-xs font-medium tracking-wider text-gray-400 uppercase">
+      {{ title }}
+    </div>
+  </div>
+
+  {{ body | safe }}
+</div>
+{% endmacro %}

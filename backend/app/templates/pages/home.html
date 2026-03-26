@@ -33,7 +33,6 @@
     {% for modal in modals %}
         {% with 
             modal_id=modal.id,
-            title=modal.title,
             token_type=modal.type
         %}
             {% include "modals/token/create_token.html" %}

@@ -14,7 +14,8 @@ from backend.app.infrastructure.database.engine import Base
 class Token(Base):
     __tablename__ = "tokens"
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-
+    slug: Mapped[str] = mapped_column(String(32), unique=True, nullable=False)
+    
     type: Mapped[str] = mapped_column(String(32), index=True)  # link|email|file|dns|image|word|...
 
     owner_user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
@@ -31,8 +32,6 @@ class Token(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
 
     payload: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict, nullable=False)
-
-    secret_hash: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
 
     __table_args__ = (
         Index("ix_tokens_owner_type", "owner_user_id", "type"),

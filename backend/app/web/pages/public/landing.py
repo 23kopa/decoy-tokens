@@ -16,5 +16,9 @@ async def landing_page(request: Request, user=Depends(get_current_user)):
     "request": request,
     }
     
-    return templates.TemplateResponse("pages/hello.html", context)
+    return templates.TemplateResponse(
+        request=request,
+        name="pages/hello.html",
+        context=context,
+    )
 

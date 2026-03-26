@@ -12,6 +12,7 @@ from backend.app.web.core.dependencies.db import get_db
 from backend.app.infrastructure.database.models.user import User
 from backend.app.infrastructure.database.repositories.token import TokenRepository
 from backend.app.infrastructure.database.repositories.token_event import TokenEventRepository
+from backend.app.services.decoy_tokens.event_presenter import build_event_responses
 from backend.app.web.api.v1.events.schemas import EventResponse
 
 router = APIRouter(prefix="/tokens/{token_id}/events", tags=["token-events"])
@@ -23,18 +24,15 @@ async def get_token_events(
     current_user: User = Depends(get_current_user),
     limit: int = Query(50, ge=1, le=100),
 ):
-    
-    # Проверяем доступ к токену
     token_repo = TokenRepository(db)
     token = token_repo.get_by_id_and_user(token_id, current_user.id)
     if not token:
         raise HTTPException(status_code=404, detail="Token not found")
-    
-    # Получаем события
+
     event_repo = TokenEventRepository(db)
     events = event_repo.get_last_event_for_token(token_id, limit=limit)
-    
-    return events
+
+    return build_event_responses(events)
 
 @router.get("/stats", response_model=dict)
 async def get_token_events_stats(

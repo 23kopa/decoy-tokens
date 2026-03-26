@@ -8,7 +8,6 @@ from backend.app.infrastructure.database.models.token_event import TokenEvent
 
 
 class TokenEventUpdateMixin:
-
     session: Session
 
     def update_event_with_new_ip(
@@ -29,21 +28,32 @@ class TokenEventUpdateMixin:
         if event.ip_history is None:
             event.ip_history = []
 
-        ip_changed = new_ip != old_ip
+        history = list(event.ip_history or [])
 
-        if ip_changed and old_ip:
+        # На каждом повторном срабатывании сохраняем предыдущее состояние
+        if old_ip:
             old_entry = {
                 "ip": old_ip,
                 "timestamp": old_last_seen.isoformat() if old_last_seen else now.isoformat(),
+                "geo": event.geo or {},
+                "asn": event.asn,
+                "org": event.org,
+                "connection_type": (event.geo or {}).get("connection_type"),
+                "ip_version": (event.current_ip_data or {}).get("ip_version"),
             }
 
-            history = list(event.ip_history or [])
-            last_history_ip = history[-1].get("ip") if history else None
+            # защита только от полного дубля подряд
+            last_entry = history[-1] if history else None
+            is_exact_duplicate = (
+                last_entry
+                and last_entry.get("ip") == old_entry["ip"]
+                and last_entry.get("timestamp") == old_entry["timestamp"]
+            )
 
-            if last_history_ip != old_ip:
+            if not is_exact_duplicate:
                 history.append(old_entry)
 
-            event.ip_history = history
+        event.ip_history = history
 
         if new_ip:
             event.current_ip = new_ip

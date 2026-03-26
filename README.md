@@ -1,7 +1,9 @@
 
 ```
 decoy-tokens
+├─ .tarignore
 ├─ Makefile
+├─ Makefile.prod
 ├─ README.dev.md
 ├─ README.md
 ├─ backend
@@ -12,7 +14,9 @@ decoy-tokens
 │  │  ├─ env.py
 │  │  ├─ script.py.mako
 │  │  └─ versions
-│  │     └─ f18364e61213_initial_migration.py
+│  │     ├─ 3964fb20af0c_drop_token_secret_hash.py
+│  │     ├─ f18364e61213_initial_migration.py
+│  │     └─ f5347ef63ae6_add_token_slug_and_backfill.py
 │  ├─ app
 │  │  ├─ __init__.py
 │  │  ├─ application
@@ -63,15 +67,25 @@ decoy-tokens
 │  │  │  ├─ __init__.py
 │  │  │  └─ decoy_tokens
 │  │  │     ├─ __init__.py
-│  │  │     ├─ collector.py
 │  │  │     ├─ engines
 │  │  │     │  ├─ __init__.py
 │  │  │     │  ├─ email.py
 │  │  │     │  └─ link.py
-│  │  │     ├─ events.py
-│  │  │     ├─ security.py
+│  │  │     ├─ event_presenter.py
+│  │  │     ├─ presenters
+│  │  │     │  ├─ event_behavior_presenter.py
+│  │  │     │  ├─ event_client_presenter.py
+│  │  │     │  ├─ event_headers_presenter.py
+│  │  │     │  ├─ event_history_presenter.py
+│  │  │     │  ├─ event_network_presenter.py
+│  │  │     │  └─ event_timeline_presenter.py
+│  │  │     ├─ request_collector.py
 │  │  │     ├─ shared
-│  │  │     │  └─ logging.py
+│  │  │     │  ├─ logging.py
+│  │  │     │  └─ slug.py
+│  │  │     ├─ token_activator.py
+│  │  │     ├─ token_creator.py
+│  │  │     ├─ token_event_logger.py
 │  │  │     └─ utils
 │  │  │        ├─ __init__.py
 │  │  │        ├─ detectors
@@ -85,7 +99,9 @@ decoy-tokens
 │  │  │        │  └─ geoip.py
 │  │  │        ├─ headers
 │  │  │        │  ├─ __init__.py
-│  │  │        │  └─ extractor.py
+│  │  │        │  ├─ extractor.py
+│  │  │        │  ├─ parser copy.py
+│  │  │        │  └─ parser.py
 │  │  │        └─ ip
 │  │  │           ├─ __init__.py
 │  │  │           ├─ detection.py
@@ -97,6 +113,14 @@ decoy-tokens
 │  │  │  │  └─ manifest.json
 │  │  │  ├─ css
 │  │  │  │  └─ style.css
+│  │  │  ├─ geoip
+│  │  │  │  ├─ GeoLite2-ASN.mmdb
+│  │  │  │  └─ GeoLite2-City.mmdb
+│  │  │  ├─ images
+│  │  │  │  ├─ favicons
+│  │  │  │  │  └─ tokenguard.svg
+│  │  │  │  └─ gifs
+│  │  │  │     └─ spbgut.gif
 │  │  │  └─ js
 │  │  │     ├─ main.js
 │  │  │     └─ main.js.map
@@ -105,20 +129,12 @@ decoy-tokens
 │  │  │  │  ├─ dashboard
 │  │  │  │  │  ├─ events
 │  │  │  │  │  │  ├─ general
-│  │  │  │  │  │  │  ├─ fingerprint_card.html
-│  │  │  │  │  │  │  ├─ ip_card.html
-│  │  │  │  │  │  │  ├─ location_card.html
-│  │  │  │  │  │  │  ├─ provider_card.html
-│  │  │  │  │  │  │  └─ timeline_card.html
-│  │  │  │  │  │  ├─ headers
-│  │  │  │  │  │  │  ├─ accept_card.html
-│  │  │  │  │  │  │  ├─ accept_encoding_card.html
-│  │  │  │  │  │  │  ├─ accept_language_card.html
 │  │  │  │  │  │  │  ├─ all_headers_card.html
-│  │  │  │  │  │  │  ├─ connection_card.html
-│  │  │  │  │  │  │  └─ user_agent_card.html
-│  │  │  │  │  │  ├─ history
-│  │  │  │  │  │  │  └─ ip_history_card.html
+│  │  │  │  │  │  │  ├─ behavior_card.html
+│  │  │  │  │  │  │  ├─ client_card.html
+│  │  │  │  │  │  │  ├─ ip_history_card.html
+│  │  │  │  │  │  │  ├─ network_card.html
+│  │  │  │  │  │  │  └─ timeline_card.html
 │  │  │  │  │  │  └─ navigation
 │  │  │  │  │  │     └─ event_card.html
 │  │  │  │  │  └─ page
@@ -141,6 +157,7 @@ decoy-tokens
 │  │  │  │  └─ public.html
 │  │  │  ├─ macros
 │  │  │  │  ├─ cards
+│  │  │  │  │  ├─ event_card.html
 │  │  │  │  │  ├─ token_item.html
 │  │  │  │  │  └─ token_preview.html
 │  │  │  │  ├─ icons
@@ -246,15 +263,17 @@ decoy-tokens
 ├─ constraints.txt
 ├─ deploy
 │  └─ nginx
-│     ├─ default.conf
-│     └─ default.conf.https
+│     └─ default.conf
 ├─ docker-compose.prod.yml
 ├─ docker-compose.yml
 ├─ frontend
+│  ├─ .vite
+│  │  └─ deps
+│  │     ├─ _metadata.json
+│  │     └─ package.json
 │  ├─ index.html
 │  ├─ package-lock.json
 │  ├─ package.json
-│  ├─ public
 │  ├─ src
 │  │  ├─ input.css
 │  │  ├─ main.js
@@ -304,10 +323,8 @@ decoy-tokens
 │  └─ vite.config.js
 ├─ pytest.ini
 ├─ scripts
-│  ├─ entrypoint.sh
-│  ├─ migrate.sh
-│  ├─ restart_db_dev.sh
-│  └─ wait_for_postgres.sh
+│  ├─ auto-backup.sh
+│  └─ backup.sh
 └─ uv.lock
 
 ```

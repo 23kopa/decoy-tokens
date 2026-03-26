@@ -10,18 +10,16 @@
     {% include "partials/modals/events/header.html" %}
   </div>
 
-  <template x-if="!loading && events.length === 0">
-    <div class="flex-1 min-h-0 overflow-y-auto">
+  <div x-show="!loading && events.length === 0"
+       class="flex-1 min-h-0">
       {% include "partials/modals/events/empty.html" %}
-    </div>
-  </template>
+  </div>
 
-  <template x-if="loading || events.length > 0">
-    <div class="flex flex-1 min-h-0 flex-col gap-3 overflow-hidden lg:flex-row">
+  <div x-show="loading || events.length > 0"
+       class="flex flex-1 min-h-0 min-w-0 flex-col gap-3 overflow-hidden lg:flex-row lg:gap-3">
       {% include "partials/modals/events/events.html" %}
       {% include "partials/modals/events/details.html" %}
-    </div>
-  </template>
+  </div>
 
   <div class="shrink-0">
     {% include "partials/modals/events/footer.html" %}
@@ -30,4 +28,4 @@
 </div>
 {% endset %}
 
-{{ modal.default_modal("token-events-modal", "События токена", body, size="5xl") }}
+{{ modal.event_modal("token-events-modal", "События токена", body) }}

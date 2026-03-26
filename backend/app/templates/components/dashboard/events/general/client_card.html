@@ -1,0 +1,33 @@
+<div class="flex flex-col p-4 component-modal">
+  <div class="flex items-center gap-2 mb-3">
+    <div class="flex items-center justify-center border rounded-lg text-emerald-400 w-7 h-7 bg-emerald-500/10 border-emerald-500/20">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+      </svg>
+    </div>
+    <div class="text-xs font-medium tracking-wider text-gray-400 uppercase">Клиент</div>
+  </div>
+
+  <div class="mb-3 font-mono text-base font-semibold text-white truncate" 
+       x-text="selectedEvent?.current_device || '—'"></div>
+
+  {# Дополнительная информация списком #}
+  <div class="mt-auto space-y-1.5 text-xs border-t border-gray-600/50 pt-3">
+
+    <div class="flex items-center justify-between text-gray-400">
+      <span>ОС</span>
+      <span class="font-mono text-gray-300" x-text="selectedEvent?.current_os || '—'"></span>
+    </div>
+
+    <div class="flex items-center justify-between text-gray-400">
+      <span>Браузер</span>
+      <span class="font-mono text-gray-300" x-text="selectedEvent?.current_browser || '—'"></span>
+    </div>
+
+    <div class="flex items-center justify-between text-gray-400">
+      <span>Язык</span>
+      <span class="text-gray-300" x-text="selectedEvent?.current_language || '—'"></span>
+    </div>
+  </div>
+</div>

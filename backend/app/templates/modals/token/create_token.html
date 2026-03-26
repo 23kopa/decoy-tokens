@@ -3,7 +3,7 @@
 {% import "macros/ui/fields.html" as fields %}
 {% import "macros/ui/buttons.html" as buttons %}
 
-{% set title = "Создание токена" %}
+{% set modal_title = "Создание токена" %}
 
 {% set body %}
 <div x-data="tokenCreate('{{ token_type }}', '{{ modal_id }}', false)"
@@ -29,4 +29,4 @@
 </div>
 {% endset %}
 
-{{ modal.default_modal(modal_id, title, body, size="lg") }}
+{{ modal.default_modal(modal_id, modal_title, body, size="lg") }}

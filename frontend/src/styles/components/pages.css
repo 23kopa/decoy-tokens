@@ -2,7 +2,8 @@
 
    .page-container {
     background-image: var(--page-bg);
-    min-height: 100vh;
+    min-height: 100dvh;
+    background-attachment: fixed;
   } 
 
   .page-component {

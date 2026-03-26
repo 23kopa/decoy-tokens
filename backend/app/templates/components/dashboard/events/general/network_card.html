@@ -1,0 +1,41 @@
+<div class="flex flex-col p-4 component-modal">
+  <div class="flex items-center gap-2 mb-3">
+    <div class="flex items-center justify-center text-blue-400 border rounded-lg w-7 h-7 bg-blue-500/10 border-blue-500/20">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+      </svg>
+    </div>
+    <div class="text-xs font-medium tracking-wider text-gray-400 uppercase">Сеть</div>
+  </div>
+
+  <div class="mb-3 font-mono text-base font-semibold text-white truncate"
+       x-text="selectedEvent?.current_ip || '—'"></div>
+
+  <div class="mt-auto space-y-1.5 text-xs border-t border-gray-600/50 pt-3">
+    <div class="flex items-center justify-between text-gray-400">
+      <span>Локация</span>
+      <span class="text-right text-gray-300 max-w-[60%] truncate"
+            x-text="selectedEvent?.location_label || '—'"></span>
+    </div>
+
+    <div class="flex items-center justify-between text-gray-400">
+      <span>Провайдер</span>
+      <span class="text-right text-gray-300 max-w-[60%] truncate"
+            x-text="selectedEvent?.provider_label || '—'"></span>
+    </div>
+
+    <div class="flex items-center justify-between text-gray-400">
+      <span>Тип</span>
+      <span class="font-mono text-gray-300"
+            x-text="selectedEvent?.connection_type_label || '—'"></span>
+    </div>
+
+    {#<div class="flex items-center justify-between text-gray-400"
+         x-show="selectedEvent?.coordinates_label">
+      <span>Координаты</span>
+      <span class="font-mono text-gray-300"
+            x-text="selectedEvent?.coordinates_label"></span>
+    </div>#}
+  </div>
+</div>
