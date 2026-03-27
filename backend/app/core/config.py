@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     PUBLIC_BASE_URL: str = "http://localhost:8000"
 
     STATIC_DIR: Path = APP_DIR / "static"
+    DATA_DIR: Path = APP_DIR / "data"
+    MEDIA_DIR: Path = APP_DIR / "media"
     TEMPLATES_DIR: Path = APP_DIR / "templates"
 
     @property
@@ -21,15 +23,15 @@ class Settings(BaseSettings):
     
     @property
     def GEOIP_CITY_PATH(self) -> Path:
-        return self.STATIC_DIR / "geoip" / "GeoLite2-City.mmdb"
+        return self.DATA_DIR / "geoip" / "GeoLite2-City.mmdb"
     
     @property
     def GEOIP_ASN_PATH(self) -> Path:
-        return self.STATIC_DIR / "geoip" / "GeoLite2-ASN.mmdb"
+        return self.DATA_DIR / "geoip" / "GeoLite2-ASN.mmdb"
 
     @property
     def TRACKING_GIF_URL(self) -> str:
-        return f"{self.PUBLIC_BASE_URL}/static/images/gifs/spbgut.gif"    
+        return f"{self.PUBLIC_BASE_URL}/media/images/gifs/spbgut.gif"    
 
     model_config = SettingsConfigDict(
         env_file=str(ROOT_DIR / ".env"),

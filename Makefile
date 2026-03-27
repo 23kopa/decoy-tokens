@@ -1,99 +1,143 @@
+# --------------------
+# CONFIG
+# --------------------
+COMPOSE_DEV = docker compose
+COMPOSE_PROD = docker compose -f docker-compose.prod.yml
 
-# VARIABLES
-DOCKER_COMPOSE = docker compose
+BACKEND = backend
+FRONTEND = frontend
 
-APP_BACKEND = backend
-APP_FRONTEND = frontend
+.PHONY: help
+
+help:
+	@echo "Available targets:"
+	@echo "  dev-up / dev-down / dev-restart / dev-logs / dev-ps"
+	@echo "  dev-shell / dev-migrate / dev-test"
+	@echo "  prod-up / prod-down / prod-restart / prod-logs / prod-ps"
+	@echo "  prod-migrate / prod-deploy / prod-status"
 
 
-# DEVELOPMENT
-.PHONY: up
-up:
-	$(DOCKER_COMPOSE) up -d
+# --------------------
+# DEV LIFECYCLE
+# --------------------
+.PHONY: dev-up dev-down dev-restart dev-logs dev-ps dev-shell
 
-.PHONY: up-build
-up-build:
-	$(DOCKER_COMPOSE) up --build
+dev-up:
+	$(COMPOSE_DEV) up -d
 
-.PHONY: down
-down:
-	$(DOCKER_COMPOSE) down
+dev-down:
+	$(COMPOSE_DEV) down
 
-.PHONY: logs
-logs:
-	$(DOCKER_COMPOSE) logs -f $(APP_BACKEND)
+dev-restart:
+	$(COMPOSE_DEV) down && $(COMPOSE_DEV) up -d
 
-.PHONY: restart
-restart:
-	$(DOCKER_COMPOSE) down
-	$(DOCKER_COMPOSE) up -d
+dev-logs:
+	$(COMPOSE_DEV) logs -f $(BACKEND)
 
-# BACKEND
-.PHONY: back-shell
-back-shell:
-	$(DOCKER_COMPOSE) exec $(APP_BACKEND) /bin/sh
+dev-ps:
+	$(COMPOSE_DEV) ps
 
-.PHONY: back-restart
-back-restart:
-	$(DOCKER_COMPOSE) restart $(APP_BACKEND)
+dev-shell:
+	$(COMPOSE_DEV) exec $(BACKEND) /bin/sh
 
-# DATABASE
-.PHONY: migrate
-migrate:
-	$(DOCKER_COMPOSE) exec $(APP_BACKEND) alembic upgrade head
 
-.PHONY: makemigration
-makemigration:
-	$(DOCKER_COMPOSE) exec $(APP_BACKEND) alembic revision --autogenerate -m "$(name)"
+# --------------------
+# DEV DATABASE
+# --------------------
+.PHONY: dev-migrate dev-makemigration dev-downgrade
 
-.PHONY: downgrade
-downgrade:
-	$(DOCKER_COMPOSE) exec $(APP_BACKEND) alembic downgrade -1
+dev-migrate:
+	$(COMPOSE_DEV) exec $(BACKEND) alembic upgrade head
 
-# FRONTEND
-.PHONY: front-dev
-front-dev:
-	cd $(APP_FRONTEND) && npm run dev
+dev-makemigration:
+	$(COMPOSE_DEV) exec $(BACKEND) alembic revision --autogenerate -m "$(name)"
 
-.PHONY: front-build
-front-build:
-	cd $(APP_FRONTEND) && npm run build
+dev-downgrade:
+	$(COMPOSE_DEV) exec $(BACKEND) alembic downgrade -1
 
-.PHONY: front-install
-front-install:
-	cd $(APP_FRONTEND) && npm install
 
-# QUALITY / FORMATTING
-.PHONY: lint
-lint:
-	$(DOCKER_COMPOSE) exec $(APP_BACKEND) ruff check .
+# --------------------
+# DEV FRONTEND
+# --------------------
+.PHONY: dev-front dev-front-build dev-front-install
 
-.PHONY: format
-format:
-	$(DOCKER_COMPOSE) exec $(APP_BACKEND) ruff format .
+dev-front:
+	cd $(FRONTEND) && npm run dev
 
-# UTILITIES
-.PHONY: ps
-ps:
-	$(DOCKER_COMPOSE) ps
+dev-front-build:
+	cd $(FRONTEND) && npm run build
 
-.PHONY: clean
-clean:
-	$(DOCKER_COMPOSE) down -v
+dev-front-install:
+	cd $(FRONTEND) && npm install
 
-# TESTS INSIDE DOCKER
-.PHONY: test
-test:
-	$(DOCKER_COMPOSE) exec $(APP_BACKEND) pytest backend/tests/ -v
 
-.PHONY: test-unit
-test-unit:
-	$(DOCKER_COMPOSE) exec $(APP_BACKEND) pytest backend/tests/unit/ -v
+# --------------------
+# TESTS
+# --------------------
+.PHONY: dev-test
 
-.PHONY: test-ip
-test-ip:
-	$(DOCKER_COMPOSE) exec $(APP_BACKEND) pytest backend/tests/unit/services/decoy_tokens/utils/ip/ -v
+dev-test:
+	$(COMPOSE_DEV) exec $(BACKEND) pytest -v
 
-.PHONY: test-geo
-test-geo:
-	$(DOCKER_COMPOSE) exec $(APP_BACKEND) pytest backend/tests/unit/services/decoy_tokens/utils/geo/ -v	
+
+# --------------------
+# PROD LIFECYCLE
+# --------------------
+.PHONY: prod-up prod-down prod-restart prod-rebuild prod-upgrade prod-logs prod-ps prod-shell
+
+prod-up:
+	$(COMPOSE_PROD) up -d
+
+prod-down:
+	$(COMPOSE_PROD) down
+
+prod-restart:
+	$(COMPOSE_PROD) restart
+
+prod-rebuild:
+	$(COMPOSE_PROD) build --no-cache backend
+
+prod-upgrade:
+	git fetch origin develop && git reset --hard origin/develop
+
+prod-logs:
+	$(COMPOSE_PROD) logs -f $(BACKEND)
+
+prod-ps:
+	$(COMPOSE_PROD) ps
+
+prod-shell:
+	$(COMPOSE_PROD) exec $(BACKEND) /bin/sh
+
+
+# --------------------
+# PROD DATABASE
+# --------------------
+.PHONY: prod-migrate prod-makemigration prod-downgrade
+
+prod-migrate:
+	$(COMPOSE_PROD) exec -T $(BACKEND) alembic upgrade head
+
+prod-makemigration:
+	$(COMPOSE_PROD) exec -T $(BACKEND) alembic revision --autogenerate -m "$(name)"
+
+prod-downgrade:
+	$(COMPOSE_PROD) exec -T $(BACKEND) alembic downgrade -1
+
+
+# --------------------
+# PROD OPS (scripts)
+# --------------------
+.PHONY: prod-deploy prod-status prod-backup prod-clean
+
+prod-deploy:
+	./scripts/prod-deploy.sh
+
+prod-status:
+	./scripts/status-check.sh
+
+prod-backup:
+	./scripts/backup.sh all
+
+prod-clean:
+	$(COMPOSE_PROD) down -v

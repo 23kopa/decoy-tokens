@@ -11,8 +11,8 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-COPY constraints.txt uv.lock ./
-RUN uv pip install --system --no-cache -r constraints.txt
+COPY requirements.txt uv.lock ./
+RUN uv pip install --system --no-cache -r requirements.txt
 
 COPY scripts ./scripts
 RUN chmod +x scripts/*.sh

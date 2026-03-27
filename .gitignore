@@ -1,7 +1,6 @@
-# ----------------------------------------
 #  Python
-# ----------------------------------------
 __pycache__/
+alembic/versions/__pycache__/
 *.py[cod]
 *.pyo
 *.pyd
@@ -21,7 +20,7 @@ env/
 # Poetry / uv cache
 .poetry/
 .cache/
-uv.lock.temp
+# uv.lock.temp
 
 # MyPy & coverage
 .mypy_cache/
@@ -37,16 +36,13 @@ htmlcov/
 !.env.production.example
 .env.production
 
-#  Alembic (лог файлов)
-alembic.ini
-alembic/versions/__pycache__/
-
-
 #  Docker
 docker-data/
 docker-compose.override.yml
 *.pid
 
+#  Dev-files
+requirements-dev.txt
 
 #  Logs
 logs/
@@ -78,3 +74,8 @@ backend/app/static/css/output.css
 backend/app/static/css/tailwind.css.map
 
 #  Tests
+trash/*
+trash/
+*/trash/
+tests/
+pytest.ini

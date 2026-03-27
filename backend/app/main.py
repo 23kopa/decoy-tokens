@@ -29,6 +29,12 @@ def create_app() -> FastAPI:
         name="static",
     )
 
+    app.mount(
+        "/media",
+        StaticFiles(directory=str(settings.MEDIA_DIR)),
+        name="media",
+    )
+
     jinja_env = Environment(
         loader=FileSystemLoader(str(settings.TEMPLATES_DIR)),
         autoescape=True,

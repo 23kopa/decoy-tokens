@@ -1,330 +1,245 @@
+# TokenGuard (Link Tracking Service)
 
-```
-decoy-tokens
-├─ .tarignore
-├─ Makefile
-├─ Makefile.prod
-├─ README.dev.md
-├─ README.md
-├─ backend
-│  ├─ Dockerfile
-│  ├─ Dockerfile.prod
-│  ├─ alembic
-│  │  ├─ README
-│  │  ├─ env.py
-│  │  ├─ script.py.mako
-│  │  └─ versions
-│  │     ├─ 3964fb20af0c_drop_token_secret_hash.py
-│  │     ├─ f18364e61213_initial_migration.py
-│  │     └─ f5347ef63ae6_add_token_slug_and_backfill.py
-│  ├─ app
-│  │  ├─ __init__.py
-│  │  ├─ application
-│  │  │  ├─ __init__.py
-│  │  │  ├─ domain
-│  │  │  │  ├─ __init__.py
-│  │  │  │  ├─ entities
-│  │  │  │  │  └─ user.py
-│  │  │  │  └─ value_objects
-│  │  │  │     └─ email.py
-│  │  │  ├─ ports
-│  │  │  │  ├─ __init__.py
-│  │  │  │  └─ user_repository.py
-│  │  │  └─ use_cases
-│  │  │     ├─ __init__.py
-│  │  │     └─ user
-│  │  │        ├─ authenticate.py
-│  │  │        └─ register.py
-│  │  ├─ core
-│  │  │  ├─ __init__.py
-│  │  │  ├─ config.py
-│  │  │  ├─ logging.py
-│  │  │  └─ security.py
-│  │  ├─ infrastructure
-│  │  │  ├─ __init__.py
-│  │  │  └─ database
-│  │  │     ├─ __init__.py
-│  │  │     ├─ base.py
-│  │  │     ├─ engine.py
-│  │  │     ├─ mappers
-│  │  │     │  └─ user.py
-│  │  │     ├─ models
-│  │  │     │  ├─ __init__.py
-│  │  │     │  ├─ token.py
-│  │  │     │  ├─ token_event.py
-│  │  │     │  └─ user.py
-│  │  │     └─ repositories
-│  │  │        ├─ __init__.py
-│  │  │        ├─ token.py
-│  │  │        ├─ token_event
-│  │  │        │  ├─ __init__.py
-│  │  │        │  ├─ crud.py
-│  │  │        │  ├─ stats.py
-│  │  │        │  └─ update.py
-│  │  │        └─ user.py
-│  │  ├─ main.py
-│  │  ├─ services
-│  │  │  ├─ __init__.py
-│  │  │  └─ decoy_tokens
-│  │  │     ├─ __init__.py
-│  │  │     ├─ engines
-│  │  │     │  ├─ __init__.py
-│  │  │     │  ├─ email.py
-│  │  │     │  └─ link.py
-│  │  │     ├─ event_presenter.py
-│  │  │     ├─ presenters
-│  │  │     │  ├─ event_behavior_presenter.py
-│  │  │     │  ├─ event_client_presenter.py
-│  │  │     │  ├─ event_headers_presenter.py
-│  │  │     │  ├─ event_history_presenter.py
-│  │  │     │  ├─ event_network_presenter.py
-│  │  │     │  └─ event_timeline_presenter.py
-│  │  │     ├─ request_collector.py
-│  │  │     ├─ shared
-│  │  │     │  ├─ logging.py
-│  │  │     │  └─ slug.py
-│  │  │     ├─ token_activator.py
-│  │  │     ├─ token_creator.py
-│  │  │     ├─ token_event_logger.py
-│  │  │     └─ utils
-│  │  │        ├─ __init__.py
-│  │  │        ├─ detectors
-│  │  │        │  ├─ __init__.py
-│  │  │        │  ├─ bot.py
-│  │  │        │  └─ dedup.py
-│  │  │        ├─ fingerprint
-│  │  │        │  ├─ __init__.py
-│  │  │        │  └─ generate.py
-│  │  │        ├─ geo
-│  │  │        │  └─ geoip.py
-│  │  │        ├─ headers
-│  │  │        │  ├─ __init__.py
-│  │  │        │  ├─ extractor.py
-│  │  │        │  ├─ parser copy.py
-│  │  │        │  └─ parser.py
-│  │  │        └─ ip
-│  │  │           ├─ __init__.py
-│  │  │           ├─ detection.py
-│  │  │           ├─ detection_trusted.py
-│  │  │           ├─ proxy.py
-│  │  │           └─ validation.py
-│  │  ├─ static
-│  │  │  ├─ .vite
-│  │  │  │  └─ manifest.json
-│  │  │  ├─ css
-│  │  │  │  └─ style.css
-│  │  │  ├─ geoip
-│  │  │  │  ├─ GeoLite2-ASN.mmdb
-│  │  │  │  └─ GeoLite2-City.mmdb
-│  │  │  ├─ images
-│  │  │  │  ├─ favicons
-│  │  │  │  │  └─ tokenguard.svg
-│  │  │  │  └─ gifs
-│  │  │  │     └─ spbgut.gif
-│  │  │  └─ js
-│  │  │     ├─ main.js
-│  │  │     └─ main.js.map
-│  │  ├─ templates
-│  │  │  ├─ components
-│  │  │  │  ├─ dashboard
-│  │  │  │  │  ├─ events
-│  │  │  │  │  │  ├─ general
-│  │  │  │  │  │  │  ├─ all_headers_card.html
-│  │  │  │  │  │  │  ├─ behavior_card.html
-│  │  │  │  │  │  │  ├─ client_card.html
-│  │  │  │  │  │  │  ├─ ip_history_card.html
-│  │  │  │  │  │  │  ├─ network_card.html
-│  │  │  │  │  │  │  └─ timeline_card.html
-│  │  │  │  │  │  └─ navigation
-│  │  │  │  │  │     └─ event_card.html
-│  │  │  │  │  └─ page
-│  │  │  │  │     ├─ activity_chart.html
-│  │  │  │  │     ├─ tokens_list.html
-│  │  │  │  │     └─ user_stats.html
-│  │  │  │  ├─ home
-│  │  │  │  │  ├─ page
-│  │  │  │  │  │  ├─ help_steps.html
-│  │  │  │  │  │  ├─ tips_secton.html
-│  │  │  │  │  │  └─ tokens_store.html
-│  │  │  │  │  └─ token
-│  │  │  │  │     └─ create_token_form.html
-│  │  │  │  └─ shared
-│  │  │  │     ├─ gif_viewer.html
-│  │  │  │     └─ notifications.html
-│  │  │  ├─ layouts
-│  │  │  │  ├─ base.html
-│  │  │  │  ├─ private.html
-│  │  │  │  └─ public.html
-│  │  │  ├─ macros
-│  │  │  │  ├─ cards
-│  │  │  │  │  ├─ event_card.html
-│  │  │  │  │  ├─ token_item.html
-│  │  │  │  │  └─ token_preview.html
-│  │  │  │  ├─ icons
-│  │  │  │  │  ├─ base.html
-│  │  │  │  │  ├─ chevron.html
-│  │  │  │  │  └─ types.html
-│  │  │  │  └─ ui
-│  │  │  │     ├─ _ui.html
-│  │  │  │     ├─ badges.html
-│  │  │  │     ├─ buttons.html
-│  │  │  │     ├─ fields.html
-│  │  │  │     ├─ forms.html
-│  │  │  │     └─ modal.html
-│  │  │  ├─ modals
-│  │  │  │  ├─ auth
-│  │  │  │  │  ├─ login.html
-│  │  │  │  │  └─ register.html
-│  │  │  │  ├─ events
-│  │  │  │  │  └─ token_event.html
-│  │  │  │  ├─ shared
-│  │  │  │  │  └─ confirm.html
-│  │  │  │  └─ token
-│  │  │  │     └─ create_token.html
-│  │  │  ├─ pages
-│  │  │  │  ├─ dashboard.html
-│  │  │  │  ├─ hello.html
-│  │  │  │  └─ home.html
-│  │  │  └─ partials
-│  │  │     ├─ headers
-│  │  │     │  ├─ dashboard_header.html
-│  │  │     │  ├─ hello_header.html
-│  │  │     │  ├─ hello_header_v2.html
-│  │  │     │  └─ home_header.html
-│  │  │     ├─ modals
-│  │  │     │  ├─ events
-│  │  │     │  │  ├─ details.html
-│  │  │     │  │  ├─ empty.html
-│  │  │     │  │  ├─ events.html
-│  │  │     │  │  ├─ footer.html
-│  │  │     │  │  └─ header.html
-│  │  │     │  └─ tokens
-│  │  │     │     ├─ create_state.html
-│  │  │     │     ├─ progress_state.html
-│  │  │     │     └─ result_state.html
-│  │  │     └─ navigation
-│  │  │        └─ navbar.html
-│  │  └─ web
-│  │     ├─ __init__.py
-│  │     ├─ api
-│  │     │  └─ v1
-│  │     │     ├─ __init__.py
-│  │     │     ├─ auth
-│  │     │     │  ├─ routes.py
-│  │     │     │  └─ schemas.py
-│  │     │     ├─ dependencies.py
-│  │     │     ├─ events
-│  │     │     │  ├─ routes.py
-│  │     │     │  └─ schemas.py
-│  │     │     └─ tokens
-│  │     │        ├─ routes.py
-│  │     │        └─ schemas.py
-│  │     ├─ core
-│  │     │  ├─ dependencies
-│  │     │  │  ├─ __init__.py
-│  │     │  │  ├─ current_user.py
-│  │     │  │  ├─ db.py
-│  │     │  │  └─ use_cases.py
-│  │     │  └─ middlewares
-│  │     │     ├─ __init__.py
-│  │     │     ├─ sessions.py
-│  │     │     └─ test_headers.py
-│  │     ├─ pages
-│  │     │  ├─ __init__.py
-│  │     │  ├─ private
-│  │     │  │  ├─ dashboard.py
-│  │     │  │  └─ home.py
-│  │     │  └─ public
-│  │     │     ├─ auth.py
-│  │     │     └─ landing.py
-│  │     └─ public
-│  │        └─ tokens
-│  │           └─ trigger.py
-│  └─ tests
-│     ├─ conftest.py
-│     ├─ e2e
-│     │  └─ test_token_flow.py
-│     ├─ fixtures
-│     │  ├─ geo_data.py
-│     │  ├─ headers.py
-│     │  ├─ ip
-│     │  │  └─ ip_data.py
-│     │  └─ requests.py
-│     └─ unit
-│        └─ services
-│           └─ decoy_tokens
-│              └─ utils
-│                 ├─ geo
-│                 │  └─ test_geoip.py
-│                 └─ ip
-│                    ├─ test_detection.py
-│                    ├─ test_proxy.py
-│                    └─ test_validation.py
-├─ constraints.txt
-├─ deploy
-│  └─ nginx
-│     └─ default.conf
-├─ docker-compose.prod.yml
-├─ docker-compose.yml
-├─ frontend
-│  ├─ .vite
-│  │  └─ deps
-│  │     ├─ _metadata.json
-│  │     └─ package.json
-│  ├─ index.html
-│  ├─ package-lock.json
-│  ├─ package.json
-│  ├─ src
-│  │  ├─ input.css
-│  │  ├─ main.js
-│  │  ├─ modules
-│  │  │  ├─ events
-│  │  │  │  ├─ components
-│  │  │  │  │  └─ tokenEvents.js
-│  │  │  │  ├─ index.js
-│  │  │  │  ├─ services
-│  │  │  │  │  └─ eventTokenService.js
-│  │  │  │  ├─ stores
-│  │  │  │  │  ├─ tokenEventsModalStore.js
-│  │  │  │  │  └─ tokenEventsStoreBridge.js
-│  │  │  │  └─ utils
-│  │  │  │     └─ eventPresentation.js
-│  │  │  ├─ index.js
-│  │  │  ├─ shared
-│  │  │  │  └─ utils
-│  │  │  │     ├─ api.js
-│  │  │  │     ├─ buttonFeedback.js
-│  │  │  │     ├─ clipboard.js
-│  │  │  │     ├─ directives
-│  │  │  │     │  └─ loadingButton.js
-│  │  │  │     ├─ logger.js
-│  │  │  │     └─ notification.js
-│  │  │  └─ tokens
-│  │  │     ├─ components
-│  │  │     │  └─ tokenCreate.js
-│  │  │     ├─ index.js
-│  │  │     ├─ services
-│  │  │     │  └─ createTokenService.js
-│  │  │     └─ utils
-│  │  │        └─ tokenProgressAnimation.js
-│  │  └─ styles
-│  │     ├─ base
-│  │     │  └─ variables.css
-│  │     ├─ components
-│  │     │  ├─ cards.css
-│  │     │  ├─ components.css
-│  │     │  ├─ modals.css
-│  │     │  ├─ pages.css
-│  │     │  └─ sections.css
-│  │     ├─ main.css
-│  │     ├─ themes
-│  │     └─ utilities
-│  │        └─ scrollbar.css
-│  └─ vite.config.js
-├─ pytest.ini
-├─ scripts
-│  ├─ auto-backup.sh
-│  └─ backup.sh
-└─ uv.lock
+## Overview
 
-```
+TokenGuard — backend-сервис для создания, редиректа и трекинга ссылок с аналитикой и эксплуатационными инструментами.
+
+Система ориентирована на self-hosted deployment через Docker и включает инфраструктурные инструменты для деплоя, миграций, бэкапов и мониторинга.
+
+---
+
+## Architecture
+
+### Runtime components
+
+* Backend API: FastAPI (Uvicorn)
+* Database: PostgreSQL 16
+* Static frontend: встроен в backend image
+* Reverse proxy: внешний (Nginx / аналог), в compose не входит
+
+---
+
+## Deployment model
+
+* Git-based deployment (branch: develop)
+* Docker immutable image rebuild per release
+* Full restart strategy (без rolling update)
+* Post-deploy migrations
+* Pre-deploy backup
+
+---
+
+## Project structure
+
+backend / application backend
+frontend / frontend build source
+scripts / operational scripts (deploy, backup, status)
+alembic / migrations
+docker-compose.prod.yml / production stack
+backend/Dockerfile.prod / multi-stage build
+Makefile / operational entrypoints
+constraints.txt / dependency specification
+
+---
+
+## Requirements
+
+### System level
+
+* Docker Engine 24+
+* Docker Compose v2
+* Git
+* OpenSSL
+* curl
+* PostgreSQL client tools (inside container)
+
+---
+
+## Configuration
+
+Environment variables (.env):
+
+Required:
+
+* POSTGRES_DB
+* POSTGRES_USER
+* POSTGRES_PASSWORD
+
+Optional:
+
+* REDIS_URL
+* ENVIRONMENT
+
+---
+
+## Build process
+
+Frontend is built during Docker image creation:
+
+* Node.js 20 stage compiles frontend
+* npm ci installs dependencies
+* npm run build produces static assets
+* Output is copied into backend static directory
+
+Backend image:
+
+* Python 3.10 slim
+* System dependencies installed via apt
+* Python dependencies installed via pip
+* Non-root execution user (appuser)
+
+---
+
+## Deployment
+
+Primary command:
+make prod-deploy
+
+Deployment pipeline:
+
+1. Full backup (DB, code, metadata)
+2. Git fetch + hard reset to origin/develop
+3. Stop containers
+4. Rebuild backend image
+5. Start containers
+6. Wait for health endpoint
+7. Run database migrations
+8. Status validation
+
+---
+
+## Makefile operations
+
+Production:
+
+* prod-up: start services
+* prod-down: stop services
+* prod-restart: restart services
+* prod-rebuild: rebuild backend image
+* prod-deploy: full deployment
+* prod-migrate: run Alembic migrations
+* prod-status: system diagnostics
+* prod-backup: backup pipeline
+* prod-clean: remove volumes
+
+Development:
+
+* dev-up / dev-down
+* dev-logs
+* dev-test
+* dev-migrate
+
+---
+
+## Database migrations
+
+Tooling: Alembic
+
+Execution:
+
+* runs inside backend container
+* triggered after successful startup + health check
+
+---
+
+## Backup system
+
+Features:
+
+* PostgreSQL dump (compressed)
+* Code snapshot archive
+* Static files snapshot
+* Update metadata (git state)
+* Retention cleanup (30 days)
+* Optional Google Drive upload via rclone
+
+Execution:
+triggered automatically before deployment
+
+---
+
+## Health & monitoring
+
+Endpoints:
+
+* /health (internal backend)
+* [https://tokenguard.ru](https://tokenguard.ru) (external check)
+
+Status tool:
+make prod-status
+
+Checks:
+
+* Docker container state
+* PostgreSQL readiness
+* Nginx/systemd status
+* SSL certificate validity
+* System resources (CPU, RAM, disk)
+
+---
+
+## Docker Compose (production)
+
+Services:
+
+backend:
+
+* FastAPI application
+* Port 8000 exposed
+* Depends on postgres
+* Mounts alembic configuration
+
+postgres:
+
+* PostgreSQL 16 Alpine
+* Persistent volume storage
+
+---
+
+## Deployment constraints
+
+* Single-node architecture
+* No horizontal scaling
+* No rolling deployments
+* No automatic rollback
+* Git-based release mechanism
+
+---
+
+## Failure domains
+
+Known risk areas:
+
+* Git reset conflicts during deployment
+* Migration timing vs service readiness
+* Database startup race conditions
+* Docker volume permission issues
+* Healthcheck timeout edge cases
+
+---
+
+## Security model
+
+* Secrets stored in environment variables
+* No hardcoded credentials in repo
+* DB accessible only within Docker network (except exposed port if enabled)
+* No application-level auth assumed at infra layer
+
+---
+
+## Maintenance
+
+Backup:
+make prod-backup
+
+Logs:
+make prod-logs
+
+Full cleanup:
+make prod-clean
+
+---
+
+## Summary
+
+TokenGuard is a single-node production deployment system designed for deterministic rebuilds, explicit operational scripts, and controlled Git-based release flow with minimal orchestration overhead.

@@ -11,7 +11,7 @@ NC='\033[0m'
 
 # Конфигурация
 PROJECT_ROOT="/var/www/tokenguard"
-BACKUP_ROOT="${PROJECT_ROOT}/backups"
+BACKUP_ROOT="/var/backups/tokenguard"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 RETENTION_DAYS=30
 
