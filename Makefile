@@ -20,10 +20,13 @@ help:
 # --------------------
 # DEV LIFECYCLE
 # --------------------
-.PHONY: dev-up dev-down dev-restart dev-logs dev-ps dev-shell
+.PHONY: dev-up dev-build dev-down dev-restart dev-logs dev-ps dev-shell
 
 dev-up:
 	$(COMPOSE_DEV) up -d
+
+dev-build:
+	$(COMPOSE_DEV) up --build
 
 dev-down:
 	$(COMPOSE_DEV) down

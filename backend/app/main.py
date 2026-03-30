@@ -21,7 +21,9 @@ def create_app() -> FastAPI:
     )
 
     setup_session_middleware(app)
-    app.add_middleware(TestHeadersMiddleware)
+
+    if settings.IS_DEV:
+        app.add_middleware(TestHeadersMiddleware)
 
     app.mount(
         "/static",

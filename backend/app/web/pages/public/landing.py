@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Request, Depends
 from fastapi.responses import RedirectResponse
 from backend.app.web.core.dependencies.current_user import get_current_user
+from backend.app.core.config import settings
 
 router = APIRouter()
 
@@ -13,7 +14,8 @@ async def landing_page(request: Request, user=Depends(get_current_user)):
     templates = request.app.state.templates
 
     context = {
-    "request": request,
+        "request": request,
+        "recaptcha_site_key": settings.RECAPTCHA_SITE_KEY,
     }
     
     return templates.TemplateResponse(
@@ -21,4 +23,3 @@ async def landing_page(request: Request, user=Depends(get_current_user)):
         name="pages/hello.html",
         context=context,
     )
-
