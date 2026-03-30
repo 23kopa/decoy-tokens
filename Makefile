@@ -134,7 +134,7 @@ prod-downgrade:
 .PHONY: prod-deploy prod-status prod-backup prod-clean
 
 prod-deploy:
-	./scripts/prod-deploy.sh
+	./scripts/prod-deploy.sh --clean
 
 prod-status:
 	./scripts/status-check.sh
