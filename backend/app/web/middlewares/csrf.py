@@ -2,6 +2,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi import Request, HTTPException
 from urllib.parse import urlparse
 import secrets
+from fastapi.responses import JSONResponse
 
 from backend.app.core.config import settings
 
@@ -43,6 +44,9 @@ class CSRFMiddleware(BaseHTTPMiddleware):
         super().__init__(app)
         self.exempt_paths = exempt_paths or set()
 
+        parsed = urlparse(settings.PUBLIC_BASE_URL)
+        self.expected_origin = f"{parsed.scheme}://{parsed.netloc}"
+
     async def dispatch(self, request: Request, call_next):
         if request.method in SAFE_METHODS:
             return await call_next(request)
@@ -63,26 +67,20 @@ class CSRFMiddleware(BaseHTTPMiddleware):
                 request_token = form.get("csrf_token")
 
         if not cookie_token or not request_token:
-            raise HTTPException(status_code=403, detail="CSRF missing")
+            return JSONResponse(status_code=403, content={"detail": "CSRF missing"})
 
         if not secrets.compare_digest(cookie_token, request_token):
-            raise HTTPException(status_code=403, detail="CSRF invalid")
+            return JSONResponse(status_code=403, content={"detail": "CSRF invalid"})
 
         origin = request.headers.get("origin")
-        host = request.headers.get("host")
-
         if origin:
-            if not host:
-                raise HTTPException(status_code=403, detail="Bad origin")
-
             parsed = urlparse(origin)
             if not parsed.scheme or not parsed.netloc:
-                raise HTTPException(status_code=403, detail="Bad origin")
+                return JSONResponse(status_code=403, content={"detail": "Bad origin"})
 
-            expected_origin = f"{request.url.scheme}://{host}"
             actual_origin = f"{parsed.scheme}://{parsed.netloc}"
 
-            if actual_origin != expected_origin:
-                raise HTTPException(status_code=403, detail="Bad origin")
+            if actual_origin != self.expected_origin:
+                return JSONResponse(status_code=403, content={"detail": "Bad origin"})
 
         return await call_next(request)
