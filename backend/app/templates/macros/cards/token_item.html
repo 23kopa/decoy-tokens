@@ -4,18 +4,25 @@
 {% macro token_item(token, index=None) %}
 <li x-data="{ 
       tokenId: '{{ token.id }}',
-      get cardStatus() { 
-        return $store.tokenCards?.items?.[this.tokenId] 
-      },
-      get isActive() {
-        return this.cardStatus?.isActive ?? {{ 'true' if token.is_active else 'false' }};
+      isActive: {{ 'true' if token.is_active else 'false' }},
+
+      syncStatus(value) {
+        this.isActive = !!value;
       }
     }"
-    x-init="$store.tokenCards?.register(tokenId, { 
-      isActive: {{ 'true' if token.is_active else 'false' }},
-      name: '{{ token.name }}',
-      type: '{{ token.type }}'
-    })">
+    x-init="
+      $store.tokenCards?.register(tokenId, { 
+        isActive: isActive,
+        name: '{{ token.name }}',
+        type: '{{ token.type }}'
+      });
+
+      window.addEventListener('token-status-changed', (e) => {
+        if (e.detail?.tokenId === tokenId) {
+          syncStatus(e.detail.isActive);
+        }
+      });
+    ">
 
   <button type="button"
           class="group w-full rounded-2xl px-4 py-3 text-left transition-all duration-200"

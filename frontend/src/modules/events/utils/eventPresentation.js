@@ -1,8 +1,19 @@
 export function formatEventDate(v) {
   if (!v) return "—";
+
   const d = new Date(v);
   if (Number.isNaN(d.getTime())) return String(v);
-  return d.toLocaleString();
+
+  const pad = (n) => String(n).padStart(2, '0');
+
+  const day = pad(d.getDate());
+  const month = pad(d.getMonth() + 1);
+  const year = d.getFullYear();
+
+  const hours = pad(d.getHours());
+  const minutes = pad(d.getMinutes());
+
+  return `${day}.${month}.${year} ${hours}:${minutes}`;
 }
 
 export function formatEventIP(v) {

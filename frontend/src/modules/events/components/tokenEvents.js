@@ -316,35 +316,38 @@ export function tokenEvents() {
           this.$store.tokenEventsModal.isActive = data.is_active;
         }
 
-        window.dispatchEvent(new CustomEvent('token-status-changed', {
-            detail: {
-              tokenId: this.tokenId,
-              isActive: this.isActive
+        if (this.$store?.tokenCards) {
+          const currentItems = this.$store.tokenCards.items || {};
+          const currentCard = currentItems[this.tokenId] || {};
+
+          this.$store.tokenCards.items = {
+            ...currentItems,
+            [this.tokenId]: {
+              ...currentCard,
+              isActive: data.is_active,
             }
-          }));
+          };
+        }
+
+        window.dispatchEvent(new CustomEvent('token-status-changed', {
+          detail: {
+            tokenId: this.tokenId,
+            isActive: data.is_active
+          }
+        }));
 
         log("tokenEvents", "token status updated", {
           tokenId: this.tokenId,
-          isActive: this.isActive,
+          isActive: data.is_active,
         });
-        
-        if (this.isActive) {
-          window.dispatchEvent(new CustomEvent('notification-show', {
-            detail: {
-              message: 'Токен активирован',
-              type: 'success',
-              duration: 3000
-            }
-          }));
-        } else {
-          window.dispatchEvent(new CustomEvent('notification-show', {
-            detail: {
-              message: 'Токен деактивирован',
-              type: 'warning',
-              duration: 3000
-            }
-          }));
-        }
+
+        window.dispatchEvent(new CustomEvent('notification-show', {
+          detail: {
+            message: data.is_active ? 'Токен активирован' : 'Токен деактивирован',
+            type: data.is_active ? 'success' : 'warning',
+            duration: 3000
+          }
+        }));
       } catch (err) {
         logError("tokenEvents", "toggleTokenActive failed", err);
         window.dispatchEvent(new CustomEvent('notification-show', {
@@ -355,6 +358,7 @@ export function tokenEvents() {
           }
         }));
       }
-    },
+    }
+
   };
 }
