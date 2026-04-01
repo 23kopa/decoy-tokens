@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Any, Awaitable, Callable
 from uuid import UUID
 
-from backend.app.application.ports.event_repository import TokenEventRepositoryPort
+from backend.app.application.ports.repositories.event_repository import TokenEventRepositoryPort
 from backend.app.domain.entities.token_event import TokenEvent
 
 

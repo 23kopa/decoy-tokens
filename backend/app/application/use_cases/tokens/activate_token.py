@@ -1,5 +1,5 @@
 from backend.app.application.errors import ValidationError
-from backend.app.application.ports.token_repository import TokenRepositoryPort
+from backend.app.application.ports.repositories.token_repository import TokenRepositoryPort
 from backend.app.domain.entities.token import Token
 
 

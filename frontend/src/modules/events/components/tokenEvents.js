@@ -238,6 +238,21 @@ export function tokenEvents() {
       }
     },
 
+    timeAgo(timestamp) {
+      if (!timestamp) return '—'
+
+      const now = new Date()
+      const date = new Date(timestamp)
+      const diff = Math.floor((now - date) / 1000)
+
+      if (diff < 60) return `${diff} сек назад`
+      if (diff < 3600) return `${Math.floor(diff / 60)} мин назад`
+      if (diff < 86400) return `${Math.floor(diff / 3600)} ч назад`
+      if (diff < 604800) return `${Math.floor(diff / 86400)} д назад`
+
+      return date.toLocaleDateString()
+    },
+
     resetButtonStates() {
       this.buttonLoading = {
         refresh: false,

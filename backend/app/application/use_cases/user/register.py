@@ -1,5 +1,5 @@
 from backend.app.domain.entities.user import User
-from backend.app.application.ports.user_repository import UserRepositoryPort
+from backend.app.application.ports.repositories.user_repository import UserRepositoryPort
 
 
 class RegisterUserUseCase:

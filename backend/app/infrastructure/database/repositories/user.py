@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
-from backend.app.application.ports.user_repository import UserRepositoryPort
+from backend.app.application.ports.repositories.user_repository import UserRepositoryPort
 from backend.app.domain.entities.user import User as DomainUser
 from backend.app.infrastructure.database.models.user import User as ORMUser
 from backend.app.infrastructure.database.base import BaseRepository

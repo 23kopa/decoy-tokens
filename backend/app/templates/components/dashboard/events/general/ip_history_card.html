@@ -1,4 +1,4 @@
-<div class="flex flex-col p-4 component-modal" x-data="{ openHistoryIndex: null }">
+<div class="flex flex-col min-h-full p-4 component-modal" x-data="{ openHistoryIndex: null }">
   <div class="flex items-center gap-2 mb-3">
     <div class="flex items-center justify-center border rounded-lg w-7 h-7 bg-blue-500/10 border-blue-500/20">
       <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -19,7 +19,8 @@
     </div>
   </div>
 
-  <div class="pt-3 border-t border-gray-600/50">
+  <div class="flex flex-col flex-1 min-h-0 pt-3 border-t border-gray-600/50">
+    
     <template x-if="selectedEvent.ip_history && selectedEvent.ip_history.length > 0">
       <div class="space-y-2">
         <template x-for="(entry, idx) in selectedEvent.ip_history.slice().reverse()" :key="idx">
@@ -115,7 +116,7 @@
     </template>
 
     <template x-if="!selectedEvent.ip_history || selectedEvent.ip_history.length === 0">
-      <div class="flex flex-col items-center justify-center py-12 text-center section-modal">
+      <div class="flex flex-col flex-1 min-h-[293px] items-center justify-center text-center section-modal">
         <div class="flex items-center justify-center w-16 h-16 mb-4 border rounded-2xl border-gray-700/50 bg-gradient-to-br from-gray-800/40 to-gray-900/60">
           <svg class="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -125,7 +126,7 @@
 
         <div class="max-w-sm">
           <h4 class="mb-2 text-sm font-semibold text-gray-300">
-            История IP адресов отсутствует
+            История обращений отсутствует
           </h4>
           <p class="text-xs leading-relaxed text-gray-500">
             Для этого события пока нет записей об изменении IP адресов.<br>
@@ -134,5 +135,6 @@
         </div>
       </div>
     </template>
+
   </div>
 </div>

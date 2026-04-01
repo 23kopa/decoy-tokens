@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from backend.app.application.ports.token_repository import TokenRepositoryPort
+from backend.app.application.ports.repositories.token_repository import TokenRepositoryPort
 
 
 class ListUserTokens:

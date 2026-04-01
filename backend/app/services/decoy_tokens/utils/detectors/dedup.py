@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from typing import Any
 from uuid import UUID
 
-from backend.app.application.ports.event_repository import TokenEventRepositoryPort
+from backend.app.application.ports.repositories.event_repository import TokenEventRepositoryPort
 
 
 class Deduplicator:

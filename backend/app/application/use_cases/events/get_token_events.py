@@ -3,8 +3,8 @@ from __future__ import annotations
 from uuid import UUID
 
 from backend.app.application.errors import ValidationError
-from backend.app.application.ports.event_repository import TokenEventRepositoryPort
-from backend.app.application.ports.token_repository import TokenRepositoryPort
+from backend.app.application.ports.repositories.event_repository import TokenEventRepositoryPort
+from backend.app.application.ports.repositories.token_repository import TokenRepositoryPort
 from backend.app.domain.entities.token_event import TokenEvent
 
 
