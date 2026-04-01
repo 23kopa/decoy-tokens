@@ -4,46 +4,27 @@ from fastapi.templating import Jinja2Templates
 from jinja2 import Environment, FileSystemLoader
 
 from .core.config import settings
-from .web import register_web_routes
 
-from .web.core.middlewares import setup_session_middleware
-from backend.app.web.core.middlewares.test_headers import TestHeadersMiddleware
-
-from backend.app.infrastructure.database.engine import engine, Base
-from backend.app.infrastructure.database import models
+from .web.routes import register_web_routes
+from .web.middlewares import setup_middlewares
 
 
 def create_app() -> FastAPI:
     
     app = FastAPI(
-        title="Directory Tokens",
+        title="TokenGuard",
         version="0.1.0"
     )
 
-    setup_session_middleware(app)
-
-    if settings.IS_DEV:
-        app.add_middleware(TestHeadersMiddleware)
-
-    app.mount(
-        "/static",
-        StaticFiles(directory=str(settings.STATIC_DIR)),
-        name="static",
-    )
-
-    app.mount(
-        "/media",
-        StaticFiles(directory=str(settings.MEDIA_DIR)),
-        name="media",
-    )
+    setup_middlewares(app)
+    app.mount("/static", StaticFiles(directory=str(settings.STATIC_DIR)), name="static",)
+    app.mount("/media", StaticFiles(directory=str(settings.MEDIA_DIR)), name="media",)
 
     jinja_env = Environment(
         loader=FileSystemLoader(str(settings.TEMPLATES_DIR)),
         autoescape=True,
-        cache_size=0  # ОТКЛЮЧАЕМ КЭШ НАХУЙ
+        cache_size=0
     )
-
-    # Base.metadata.create_all(bind=engine)
 
     templates = Jinja2Templates(env=jinja_env)
 

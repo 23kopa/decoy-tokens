@@ -1,0 +1,29 @@
+from __future__ import annotations
+
+from datetime import datetime
+from typing import Protocol
+from uuid import UUID
+
+from backend.app.domain.entities.token_event import TokenEvent
+
+
+class TokenEventRepositoryPort(Protocol):
+    def add(self, event: TokenEvent) -> TokenEvent: ...
+    def get_event_by_id(self, event_id: UUID) -> TokenEvent | None: ...
+    def get_event_by_fingerprint_id(self, token_id: UUID, fingerprint: str) -> TokenEvent | None: ...
+    def get_last_event_for_token(self, token_id: UUID, limit: int = 50) -> list[TokenEvent]: ...
+    def count_events_by_token_id(self, token_id: UUID, since: datetime | None = None) -> int: ...
+    def get_user_stats(self, token_ids: list[UUID], hours_24: datetime) -> dict: ...
+    def get_token_stats(self, token_id: UUID) -> dict: ...
+    def update_event_with_new_ip(
+        self,
+        event: TokenEvent,
+        current_ip_data: dict,
+        request_data: dict,
+    ) -> None: ...
+    def count_by_fingerprint_since(
+        self,
+        token_id: UUID,
+        fingerprint: str,
+        since: datetime,
+    ) -> int: ...

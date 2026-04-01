@@ -131,9 +131,12 @@ prod-downgrade:
 # --------------------
 # PROD OPS (scripts)
 # --------------------
-.PHONY: prod-deploy prod-status prod-backup prod-clean
+.PHONY: prod-deploy prod-deploy-clean prod-status prod-backup prod-clean
 
 prod-deploy:
+	./scripts/prod-deploy.sh
+
+prod-deploy-clean:
 	./scripts/prod-deploy.sh --clean
 
 prod-status:

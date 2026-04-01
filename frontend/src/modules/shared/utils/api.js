@@ -1,4 +1,10 @@
-// frontend/src/modules/shared/utils/api.js
+function getCookie(name) {
+    return document.cookie
+        .split('; ')
+        .find(row => row.startsWith(name + '='))
+        ?.split('=')[1];
+}
+
 export class ApiClient {
     constructor(baseUrl = '/api') {
         this.baseUrl = baseUrl;
@@ -6,12 +12,25 @@ export class ApiClient {
 
     async request(endpoint, options = {}) {
         const url = `${this.baseUrl}${endpoint}`;
+
+        const method = (options.method || 'GET').toUpperCase();
+
+        const headers = {
+            'Content-Type': 'application/json',
+            ...options.headers
+        };
+
+        if (!['GET', 'HEAD', 'OPTIONS'].includes(method)) {
+            const csrf = getCookie('csrf_token');
+            if (csrf) {
+                headers['X-CSRF-Token'] = csrf;
+            }
+        }
+
         const response = await fetch(url, {
-            headers: {
-                'Content-Type': 'application/json',
-                ...options.headers
-            },
-            ...options
+            ...options,
+            headers,
+            credentials: 'include'
         });
 
         if (!response.ok) {
@@ -34,7 +53,7 @@ export class ApiClient {
             method: 'PATCH',
             body: JSON.stringify(data)
         });
-    }    
+    }
 
     get(endpoint) {
         return this.request(endpoint, {

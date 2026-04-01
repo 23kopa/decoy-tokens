@@ -11,14 +11,14 @@ export default defineConfig({
   },
 
   css: {
-    devSourcemap: true,
+    devSourcemap: false,
   },
 
   build: {
     outDir: 'dist',
     emptyOutDir: true,
     cssCodeSplit: false,
-    sourcemap: true,
+    sourcemap: false,
     manifest: true,
     rollupOptions: {
       input: 'src/main.js',

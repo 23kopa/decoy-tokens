@@ -3,7 +3,7 @@ from starlette.requests import Request
 
 from .validation import is_public_ip
 from .proxy import parse_proxy_chain
-from ...shared.logging import logger, log_ip_detection
+from .....infrastructure.utils.logging import logger, logging_ip_detection
 
 def get_client_ip(
     request: Request, 
@@ -57,7 +57,7 @@ def get_client_ip(
         logger.info(f"Found public IP in X-Real-IP: {xri}")
     
     if ip_from_headers:
-        log_ip_detection(result)
+        logging_ip_detection(result)
         return result
     
     result["detected_ip"] = direct_ip

@@ -1,9 +1,9 @@
 from typing import Optional
-from backend.app.application.domain.entities.user import User
+from backend.app.domain.entities.user import User
 from backend.app.application.ports.user_repository import UserRepositoryPort
 
 
-class AuthenticateUser:
+class AuthenticateUserUseCase:
     def __init__(self, repo: UserRepositoryPort, verifier):
         self.repo = repo
         self.verifier = verifier
@@ -14,7 +14,7 @@ class AuthenticateUser:
         if not user:
             return None
 
-        if not user.verify_password(password, self.verifier):
+        if not self.verifier(password, user.hashed_password):
             return None
 
         if not user.is_active:

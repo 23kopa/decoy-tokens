@@ -1,4 +1,4 @@
-from backend.app.application.domain.entities.user import User as DomainUser
+from backend.app.domain.entities.user import User as DomainUser
 from backend.app.infrastructure.database.models.user import User as ORMUser
 
 class UserMapper:

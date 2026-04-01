@@ -4,7 +4,8 @@ from datetime import datetime
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from backend.app.infrastructure.database.models.token_event import TokenEvent
+from backend.app.domain.entities.token_event import TokenEvent as DomainTokenEvent
+from backend.app.infrastructure.database.models.token_event import TokenEvent as TokenEventModel
 
 
 class TokenEventUpdateMixin:
@@ -12,37 +13,43 @@ class TokenEventUpdateMixin:
 
     def update_event_with_new_ip(
         self,
-        event: TokenEvent,
+        event: DomainTokenEvent,
         current_ip_data: dict,
         request_data: dict,
     ) -> None:
+        if event.id is None:
+            return
+
+        stmt = select(TokenEventModel).where(TokenEventModel.id == event.id)
+        model = self.session.scalar(stmt)
+        if not model:
+            return
+
         now = datetime.utcnow()
 
-        old_ip = event.current_ip
+        old_ip = model.current_ip
         new_ip = current_ip_data.get("detected_ip")
-        old_last_seen = event.last_seen
+        old_last_seen = model.last_seen
 
-        event.seen_count += 1
-        event.is_first = False
+        model.seen_count += 1
+        model.is_first = False
 
-        if event.ip_history is None:
-            event.ip_history = []
+        if model.ip_history is None:
+            model.ip_history = []
 
-        history = list(event.ip_history or [])
+        history = list(model.ip_history or [])
 
-        # На каждом повторном срабатывании сохраняем предыдущее состояние
         if old_ip:
             old_entry = {
                 "ip": old_ip,
                 "timestamp": old_last_seen.isoformat() if old_last_seen else now.isoformat(),
-                "geo": event.geo or {},
-                "asn": event.asn,
-                "org": event.org,
-                "connection_type": (event.geo or {}).get("connection_type"),
-                "ip_version": (event.current_ip_data or {}).get("ip_version"),
+                "geo": model.geo or {},
+                "asn": model.asn,
+                "org": model.org,
+                "connection_type": (model.geo or {}).get("connection_type"),
+                "ip_version": (model.current_ip_data or {}).get("ip_version"),
             }
 
-            # защита только от полного дубля подряд
             last_entry = history[-1] if history else None
             is_exact_duplicate = (
                 last_entry
@@ -53,43 +60,43 @@ class TokenEventUpdateMixin:
             if not is_exact_duplicate:
                 history.append(old_entry)
 
-        event.ip_history = history
+        model.ip_history = history
 
         if new_ip:
-            event.current_ip = new_ip
-            event.last_ip = new_ip
+            model.current_ip = new_ip
+            model.last_ip = new_ip
 
-        event.current_ip_data = current_ip_data
-        event.current_user_agent = request_data.get("headers", {}).get("user-agent")
-        event.current_headers = request_data.get("headers", {})
-        event.current_port = request_data.get("client_port")
+        model.current_ip_data = current_ip_data
+        model.current_user_agent = request_data.get("headers", {}).get("user-agent")
+        model.current_headers = request_data.get("headers", {})
+        model.current_port = request_data.get("client_port")
 
         geo_data = request_data.get("geo", {}) or {}
-        event.geo = geo_data
-        event.asn = str(geo_data.get("asn")) if geo_data.get("asn") is not None else None
-        event.org = geo_data.get("as_org") or geo_data.get("organization")
+        model.geo = geo_data
+        model.asn = str(geo_data.get("asn")) if geo_data.get("asn") is not None else None
+        model.org = geo_data.get("as_org") or geo_data.get("organization")
 
-        unique_ips = {entry["ip"] for entry in event.ip_history if entry.get("ip")}
-        if event.current_ip:
-            unique_ips.add(event.current_ip)
-        event.unique_ip_count = len(unique_ips)
+        unique_ips = {entry["ip"] for entry in model.ip_history if entry.get("ip")}
+        if model.current_ip:
+            unique_ips.add(model.current_ip)
+        model.unique_ip_count = len(unique_ips)
 
-        event.last_seen = now
+        model.last_seen = now
 
-        self.session.add(event)
+        self.session.add(model)
 
     def count_by_fingerprint_since(
         self,
         token_id: uuid.UUID,
         fingerprint: str,
-        since: datetime
+        since: datetime,
     ) -> int:
         stmt = (
-            select(TokenEvent.seen_count)
+            select(TokenEventModel.seen_count)
             .where(
-                TokenEvent.token_id == token_id,
-                TokenEvent.fingerprint == fingerprint,
-                TokenEvent.last_seen >= since
+                TokenEventModel.token_id == token_id,
+                TokenEventModel.fingerprint == fingerprint,
+                TokenEventModel.last_seen >= since,
             )
         )
         result = self.session.execute(stmt).scalar()

@@ -1,8 +1,8 @@
-from backend.app.application.domain.entities.user import User
+from backend.app.domain.entities.user import User
 from backend.app.application.ports.user_repository import UserRepositoryPort
 
 
-class RegisterUser:
+class RegisterUserUseCase:
     def __init__(self, repo: UserRepositoryPort, hasher):
         self.repo = repo
         self.hasher = hasher

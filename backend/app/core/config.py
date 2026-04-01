@@ -19,7 +19,7 @@ class Settings(BaseSettings):
 
     STATIC_DIR: Path = APP_DIR / "static"
     DATA_DIR: Path = APP_DIR / "data"
-    MEDIA_DIR: Path = APP_DIR / "media"
+    MEDIA_DIR: Path = DATA_DIR / "media"
     TEMPLATES_DIR: Path = APP_DIR / "templates"
 
     @property
@@ -44,7 +44,7 @@ class Settings(BaseSettings):
 
     @property
     def TRACKING_GIF_URL(self) -> str:
-        return f"{self.PUBLIC_BASE_URL}/media/images/gifs/spbgut.gif"    
+        return f"{self.PUBLIC_BASE_URL}/media/gifs/spbgut.gif"    
 
     model_config = SettingsConfigDict(
         env_file=str(ROOT_DIR / ".env"),

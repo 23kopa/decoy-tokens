@@ -2,12 +2,12 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
 from backend.app.application.ports.user_repository import UserRepositoryPort
-from backend.app.application.domain.entities.user import User as DomainUser
+from backend.app.domain.entities.user import User as DomainUser
 from backend.app.infrastructure.database.models.user import User as ORMUser
 from backend.app.infrastructure.database.base import BaseRepository
 from backend.app.infrastructure.database.mappers.user import UserMapper
 
-class SQLAlchemyUserRepository(UserRepositoryPort):
+class UserRepository(UserRepositoryPort):
     def __init__(self, session: Session):
         self.session = session
         self.base = BaseRepository(session, ORMUser)

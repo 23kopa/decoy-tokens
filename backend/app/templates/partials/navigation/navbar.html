@@ -127,7 +127,7 @@
               {# Mobile User Info #}
               <div class="p-4 border-b border-gray-700/40">
                 <div class="flex items-center gap-3">
-                  <div class="flex items-center justify-center w-10 h-10 text-sm font-semibold text-white border shadow-sm shrink-0 rounded-xl border-gray-600/50 bg-gradient-to-br from-gray-700 to-gray-800">
+                  <div class="flex items-center justify-center w-10 h-10 text-sm font-semibold text-white border shadow-sm shrink-0 rounded-xl border-gray-600/50 bg-linear-to-br from-gray-700 to-gray-800">
                     {{ (user.username[:1] if user and user.username else "U")|upper }}
                   </div>
                   <div class="min-w-0">
@@ -202,6 +202,7 @@
 
         {# LOGOUT #}
         <form action="/auth/logout" method="post">
+          <input type="hidden" name="csrf_token" value="{{ request.cookies.get('csrf_token', '') }}">
           <button
             type="submit"
             class="flex items-center justify-center w-10 h-10 text-red-300 transition-all duration-200 border group rounded-xl border-red-500/20 bg-red-500/5 hover:border-red-500/30 hover:bg-red-500/10 hover:text-red-200 focus:outline-none focus:ring-2 focus:ring-red-500/20"

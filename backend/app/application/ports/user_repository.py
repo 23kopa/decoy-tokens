@@ -1,5 +1,5 @@
 from typing import Protocol, Optional
-from backend.app.application.domain.entities.user import User
+from backend.app.domain.entities.user import User
 
 
 class UserRepositoryPort(Protocol):
