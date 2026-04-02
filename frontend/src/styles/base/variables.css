@@ -1,22 +1,25 @@
 @theme {
   
-  --page-bg: linear-gradient(
-    to bottom,
-    rgba(15, 23, 42, 1) 0%,
-    rgba(10, 17, 32, 1) 55%,
-    rgba(6, 10, 20, 1) 100%
-  );
+--page-bg: linear-gradient(
+  to bottom,
+  rgba(15, 23, 45, 1) 0%,
+  rgba(10, 17, 35, 1) 55%,
+  rgba(6, 10, 25, 1) 100%
+);
 
-
-  --page-component-bg: linear-gradient(
+--page-component-bg:
+  linear-gradient(
     to bottom,
-    rgba(19, 29, 48, 0.92),
-    rgba(13, 21, 38, 0.96)
-  );
-  --page-component-border: 1px solid rgba(88, 110, 146, 0.18);
-  --page-component-shadow:
-    0 18px 40px -20px rgb(0 0 0 / 0.15),
-    inset 0 1px 0 rgb(255 255 255 / 0.03);
+    rgba(255, 255, 255, 0.03),
+    rgba(255, 255, 255, 0.01)
+  ),
+  rgba(13, 21, 48, 0.78);
+
+--page-component-border: 1px solid rgba(88, 110, 146, 0.18);
+
+--page-component-shadow:
+  0 18px 40px -20px rgb(0 0 0 / 0.15),
+  inset 0 1px 0 rgb(255 255 255 / 0.03);
 
 
   --section-bg: linear-gradient(

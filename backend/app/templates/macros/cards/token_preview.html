@@ -4,18 +4,19 @@
 {% macro token_type(title, description, icon=None, modal_id=None, token_type=None, enabled=true) %}
 
 {% if enabled %}
-  <button type="button"
-          class="relative w-full p-5 text-left transition-all duration-200 component-base group hover:border-blue-500/30 hover:shadow-xl"
-          data-modal-target="{{ modal_id }}"
-          data-modal-toggle="{{ modal_id }}">
+  <div role="button" tabindex="0"
+       class="relative flex items-center w-full h-full p-5 text-left transition-all cursor-pointer duration-200 component-base group hover:border-blue-500/30 hover:shadow-xl"
+       data-modal-target="{{ modal_id }}"
+       data-modal-toggle="{{ modal_id }}">
 
     {# Градиентный оверлей при наведении #}
     <div class="absolute inset-0 transition-opacity opacity-0 rounded-2xl bg-gradient-to-br from-blue-500/5 to-purple-500/5 group-hover:opacity-100"></div>
     
-    <div class="relative flex items-center gap-4">
-
-      {# Иконка с цветным фоном #}
-      <div class="flex items-center justify-center transition-colors border rounded-xl w-11 h-11 shrink-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-blue-500/20 group-hover:border-blue-500/30">
+    {# Убираем gap-4 отсюда #}
+    <div class="relative flex w-full">
+      
+      {# Иконка #}
+      <div class="flex items-center justify-center transition-colors border rounded-xl w-11 h-11 shrink-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-blue-500/20 group-hover:border-blue-500/30 mr-4">
         {% if icon %}
           <span class="text-blue-400">{{ icon }}</span>
         {% else %}
@@ -23,7 +24,7 @@
         {% endif %}
       </div>
 
-      {# Контент #}
+      {# Контент - теперь занимает всё оставшееся пространство #}
       <div class="flex-1 min-w-0">
         <div class="flex items-center justify-between gap-4">
           <div class="min-w-0">
@@ -37,15 +38,15 @@
             </p>
           </div>
 
-          {# Стрелка с анимацией #}
+          {# Стрелка - теперь будет справа #}
           <div class="flex items-center text-gray-500 transition-all duration-200 translate-x-0 group-hover:translate-x-1 group-hover:text-blue-400 shrink-0">
             {{ chevron_icons.chevron_indicator('right') }}
           </div>
         </div>
       </div>
-
+      
     </div>
-  </button>
+  </div>
 {% else %}
 <div class="relative flex items-center w-full h-full p-5 text-left transition-all duration-200 cursor-not-allowed component-base group opacity-60">
 
