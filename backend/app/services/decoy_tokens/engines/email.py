@@ -1,7 +1,8 @@
 from typing import Optional
 from starlette.responses import Response
 from starlette.requests import Request
-from backend.app.infrastructure.database.models.token import Token
+
+from backend.app.domain.entities.token import Token
 
 GIF_1x1 = (
     b"GIF89a\x01\x00\x01\x00\x80\x00\x00"

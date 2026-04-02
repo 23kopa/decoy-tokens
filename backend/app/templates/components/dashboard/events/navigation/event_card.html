@@ -8,6 +8,7 @@
   {# Верхняя часть с IP и статусом #}
   <div class="flex items-start justify-between gap-3">
     <div class="flex items-center min-w-0 gap-3">
+      
       {# Иконка с цветом в зависимости от статуса #}
       <div class="flex items-center justify-center text-lg border rounded-xl h-9 w-9 shrink-0"
            :class="event.is_first 
@@ -30,30 +31,31 @@
     </div>
 
     {# Статус с цветом #}
-    <span class="shrink-0 rounded-full px-2.5 py-1 text-[10px] font-medium border"
+    <span class="shrink-0 rounded-full px-2.5 py-1 text-2xs font-medium border"
           :class="getEventStatusColor(event)"
           x-text="event.is_first ? 'ПЕРВЫЙ' : (event.additional_data?.bot_info?.is_bot ? 'БОТ' : 'ПОВТОР')">
     </span>
+
   </div>
 
   {# User Agent с иконкой #}
-  <div class="flex items-center gap-2 pt-2 mt-2 text-xs border-t border-gray-700/50">
-    <svg class="w-3.5 h-3.5 text-gray-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-    </svg>
+  <div class="flex items-baseline gap-1 pt-2 mt-2 text-xs border-t border-gray-700/50">
+    
+    <span class="text-gray-500 shrink-0 leading-none">
+      FP:
+    </span>
+
     <div
-  class="min-w-0 flex-1 text-gray-400 truncate"
-  :title="formatUserAgent(event.current_user_agent)"
-  x-text="(() => {
-    const ua = formatUserAgent(event.current_user_agent);
-    if (!ua) return '—';
+      class="min-w-0 flex-1 text-gray-400 truncate font-mono leading-none"
+      :title="event.fingerprint"
+      x-text="(() => {
+        const fp = event.fingerprint;
+        if (!fp) return '—';
 
-    const isMobile = window.innerWidth < 640;
-    const max = isMobile ? 28 : 48;
+        return fp.slice(0, 15) + '…' + fp.slice(-12);
+      })()">
+    </div>
 
-    return ua.length > max ? ua.slice(0, max) + '…' : ua;
-  })()">
-</div>
   </div>
   
 </button>

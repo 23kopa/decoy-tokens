@@ -30,16 +30,6 @@ from backend.app.services.decoy_tokens.utils.fingerprint.generate import generat
 from .db import get_db
 
 
-TRUSTED_PROXIES = {
-    "127.0.0.1",
-    "localhost",
-    "::1",
-    "172.16.0.0/12",
-    "10.0.0.0/8",
-    "192.168.0.0/16",
-}
-
-
 def get_register_user(db: Session = Depends(get_db)) -> RegisterUserUseCase:
     repo = UserRepository(db)
     return RegisterUserUseCase(repo, hash_password)
@@ -66,14 +56,15 @@ def get_set_token_active(db: Session = Depends(get_db)) -> SetTokenActiveUseCase
 
 def get_log_token_event(db: Session = Depends(get_db)) -> LogTokenEvent:
     repo = TokenEventRepository(db)
+
     return LogTokenEvent(
         repo=repo,
         request_info_collector=collect_request_info,
         fingerprint_generator=generate_fingerprint,
         is_bot_checker=is_bot,
         bot_type_getter=get_bot_type,
-        deduplicator_factory=lambda repo: create_deduplicator(repo, window_seconds=60),
-        trusted_proxies=TRUSTED_PROXIES,
+        deduplicator_factory=create_deduplicator,
+        trusted_proxies=settings.TRUSTED_PROXIES_SET,
     )
 
 

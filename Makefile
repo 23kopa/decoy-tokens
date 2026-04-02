@@ -58,6 +58,16 @@ dev-makemigration:
 dev-downgrade:
 	$(COMPOSE_DEV) exec $(BACKEND) alembic downgrade -1
 
+# --------------------
+# DEV REDIS
+# --------------------
+.PHONY: dev-redis-cli dev-redis-ping
+
+dev-redis-cli:
+	$(COMPOSE_DEV) exec redis redis-cli
+
+dev-redis-ping:
+	$(COMPOSE_DEV) exec redis redis-cli ping
 
 # --------------------
 # DEV FRONTEND

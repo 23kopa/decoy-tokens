@@ -3,7 +3,8 @@ from fastapi.responses import FileResponse
 from fastapi.templating import Jinja2Templates
 from starlette.requests import Request
 from backend.app.core.config import settings
-from backend.app.infrastructure.database.models.token import Token
+
+from backend.app.domain.entities.token import Token
 
 templates = Jinja2Templates(directory=str(settings.TEMPLATES_DIR))
 

@@ -1,6 +1,6 @@
 from typing import Optional, List, Dict, Any, Union, Literal, overload
 from .validation import is_public_ip, get_ip_version
-
+from ipaddress import ip_address, ip_network
 
 @overload
 def parse_proxy_chain(
@@ -17,6 +17,27 @@ def parse_proxy_chain(
 ) -> List[Dict[str, Any]]:
     ...
 
+def is_trusted_proxy(ip: str, trusted_proxies: Optional[Union[set[str], list[str]]]) -> bool:
+    if not trusted_proxies:
+        return False
+
+    try:
+        candidate = ip_address(ip)
+    except ValueError:
+        return False
+
+    for proxy in trusted_proxies:
+        try:
+            if "/" in proxy:
+                if candidate in ip_network(proxy, strict=False):
+                    return True
+            else:
+                if candidate == ip_address(proxy):
+                    return True
+        except ValueError:
+            continue
+
+    return False
 
 def parse_proxy_chain(
     xff_header: Optional[str],

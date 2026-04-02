@@ -4,7 +4,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from backend.app.core.config import settings
 
 def setup_session_middleware(app: FastAPI) -> None:
-    is_production = settings.APP_ENV == "prod"
+    is_production = settings.IS_PROD
 
     app.add_middleware(
         SessionMiddleware,

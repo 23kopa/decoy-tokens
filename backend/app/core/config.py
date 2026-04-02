@@ -14,8 +14,12 @@ class Settings(BaseSettings):
     POSTGRES_USER: str = ""
     POSTGRES_PASSWORD: str = ""
 
+    REDIS_URL: str = "redis://redis:6379/0"
+
     RECAPTCHA_SITE_KEY: str = ""
     RECAPTCHA_SECRET_KEY: str = ""
+
+    TRUSTED_PROXIES: str = "127.0.0.1,::1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
 
     STATIC_DIR: Path = APP_DIR / "static"
     DATA_DIR: Path = APP_DIR / "data"
@@ -33,7 +37,15 @@ class Settings(BaseSettings):
     @property
     def USE_VITE(self) -> bool:
         return self.APP_ENV == "dev"
-    
+
+    @property
+    def TRUSTED_PROXIES_SET(self) -> set[str]:
+        return {
+            item.strip()
+            for item in self.TRUSTED_PROXIES.split(",")
+            if item.strip()
+        }
+
     @property
     def GEOIP_CITY_PATH(self) -> Path:
         return self.DATA_DIR / "geoip" / "GeoLite2-City.mmdb"

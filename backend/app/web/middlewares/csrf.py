@@ -15,7 +15,7 @@ def generate_csrf_token() -> str:
 
 class CSRFCookieInitMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
-        is_production = settings.APP_ENV == "prod"
+        is_production = settings.IS_PROD
 
         csrf_token = request.cookies.get("csrf_token")
         should_set_cookie = False

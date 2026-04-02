@@ -6,9 +6,8 @@ from backend.app.application.ports.repositories.event_repository import TokenEve
 
 
 class Deduplicator:
-    def __init__(self, repo: TokenEventRepositoryPort, window_seconds: int = 60):
+    def __init__(self, repo: TokenEventRepositoryPort):
         self.repo = repo
-        self.window_seconds = window_seconds
 
     def process(self, token_id: UUID, fingerprint: str, request_data: dict[str, Any]) -> bool:
         existing = self.repo.get_event_by_fingerprint_id(token_id, fingerprint)
@@ -27,10 +26,9 @@ class AdvancedDeduplicator(Deduplicator):
     def __init__(
         self,
         repo: TokenEventRepositoryPort,
-        window_seconds: int = 60,
         max_visits_per_day: int = 10,
     ):
-        super().__init__(repo, window_seconds)
+        super().__init__(repo)
         self.max_visits_per_day = max_visits_per_day
 
     def check_rate_limit(self, token_id: UUID, fingerprint: str) -> bool:
@@ -43,8 +41,5 @@ class AdvancedDeduplicator(Deduplicator):
         return visits_today >= self.max_visits_per_day
 
 
-def create_deduplicator(
-    repo: TokenEventRepositoryPort,
-    window_seconds: int = 60,
-) -> Deduplicator:
-    return Deduplicator(repo, window_seconds)
+def create_deduplicator(repo: TokenEventRepositoryPort) -> Deduplicator:
+    return Deduplicator(repo)

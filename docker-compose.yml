@@ -35,10 +35,18 @@ services:
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - postgres_dev_data:/var/lib/postgresql/data/pgdata
-    networks:
-      - backend
     ports:
       - "5432:5432"
+    networks:
+      - backend
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "no"]
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
 
 networks:
   backend:
