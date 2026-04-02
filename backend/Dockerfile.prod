@@ -28,6 +28,7 @@ RUN chmod +x scripts/*.sh
 
 COPY backend ./backend
 
+RUN find /app/backend/app/static -mindepth 1 -maxdepth 1 -exec rm -rf {} +
 COPY --from=frontend-builder /app/frontend/dist /app/backend/app/static
 
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
