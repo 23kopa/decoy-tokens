@@ -5,7 +5,7 @@ import { notification } from '../shared/utils/notification';
 import { registerTokenEventsModalStore, registerTokenCardsStore } from './stores/tokenEventsModalStore';
 import { initEventsBridge } from './stores/tokenEventsStoreBridge';
 
-export * from './services/eventTokenService';
+export * from './services/showEventsInfoService';
 export * from './utils/eventPresentation';
 
 document.addEventListener('alpine:init', () => {

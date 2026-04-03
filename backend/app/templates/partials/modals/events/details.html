@@ -67,7 +67,7 @@
                 title="Скачать JSON события"
                 class="flex items-center justify-center w-8 h-8 text-gray-400 transition-all duration-200 border rounded-lg bg-gray-900/40 border-gray-700/50 hover:bg-gray-800 hover:text-white hover:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
                 :disabled="!selectedEvent || buttonLoading.download"
-                @click="downloadEventWithFeedback(selectedEvent)"
+                @click="downloadEventJson(selectedEvent)"
                 x-loading-button="buttonLoading.download">
           <span :class="buttonLoading.download ? 'animate-spin' : ''">
             <template x-if="!buttonLoading.download">

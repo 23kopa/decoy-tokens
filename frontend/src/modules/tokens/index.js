@@ -1,4 +1,3 @@
-// frontend/src/modules/tokens/index.js
 import Alpine from 'alpinejs';
 
 // Импорт компонентов

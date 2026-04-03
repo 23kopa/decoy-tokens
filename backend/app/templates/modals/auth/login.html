@@ -89,16 +89,13 @@
 
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script>
-// Простой и надежный обработчик
 document.addEventListener('DOMContentLoaded', function() {
-    // Функция для добавления обработчика к форме
     function addHandlerToForm() {
         const form = document.querySelector('form[action="/auth/login"]');
         if (form && !form.hasAttribute('data-captcha-handled')) {
             form.setAttribute('data-captcha-handled', 'true');
             
             form.addEventListener('submit', function(e) {
-                // Ждем reCAPTCHA API
                 if (typeof grecaptcha === 'undefined') {
                     e.preventDefault();
                     alert('reCAPTCHA загружается, попробуйте еще раз');
@@ -114,7 +111,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     return false;
                 }
                 
-                // Добавляем токен в форму
                 let input = form.querySelector('input[name="g_recaptcha_response"]');
                 if (!input) {
                     input = document.createElement('input');
@@ -127,11 +123,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Запускаем сразу и с задержкой (для динамических модалок)
     addHandlerToForm();
     setTimeout(addHandlerToForm, 1000);
     
-    // Наблюдаем за появлением формы
     const observer = new MutationObserver(function() {
         addHandlerToForm();
     });

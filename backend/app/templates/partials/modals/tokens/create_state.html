@@ -61,7 +61,7 @@
      class="space-y-4">
 
   {# Верхний инфо-блок #}
-  <div class="p-4 border rounded-2xl component-secondary">
+  <div class="section-modal">
     <div class="flex items-start gap-3">
       <div class="flex items-center justify-center w-10 h-10 border rounded-xl shrink-0 {{ meta.icon_bg }} {{ meta.icon_border }}">
         {% if token_type == "link" %}
@@ -108,7 +108,7 @@
   {% call forms.form(action="#", method="post", class_extra="space-y-4", attrs={"@submit.prevent": "submit"}) %}
 
     {# Основной блок #}
-    <div class="p-4 border rounded-2xl component-modal border-gray-700/50">
+    <div class="section-modal">
       <div class="flex items-center gap-2 mb-4">
         <div class="flex items-center justify-center text-blue-400 border rounded-lg w-7 h-7 bg-blue-500/10 border-blue-500/20">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -157,7 +157,7 @@
     </div>
 
     {% if token_type == "link" %}
-      <div class="p-4 border rounded-2xl component-modal border-gray-700/50">
+      <div class="section-modal">
         <div class="flex items-center gap-2 mb-4">
           <div class="flex items-center justify-center text-purple-400 border rounded-lg w-7 h-7 bg-purple-500/10 border-purple-500/20">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

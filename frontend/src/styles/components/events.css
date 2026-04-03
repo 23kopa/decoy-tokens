@@ -1,0 +1,76 @@
+.events-modal-content-blurred {
+  filter: blur(3px) brightness(0.85);
+  pointer-events: none;
+  user-select: none;
+  border-radius: 14px;
+  transition: all 0.2s ease;
+}
+
+.events-modal-refresh-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-image: var(--section-bg);
+  border: var(--section-border);
+  box-shadow: var(--section-shadow);
+
+  border-radius: 1.5rem;
+  backdrop-filter: blur(4px); /* усилим эффект */
+}
+
+.events-modal-refresh-box {
+  min-width: 240px;
+  max-width: 320px;
+  padding: 16px 18px;
+
+  border-radius: 14px;
+
+  background-image: var(--section-bg);
+  border: var(--section-border);
+  box-shadow: var(--section-shadow);
+
+  backdrop-filter: blur(6px); /* optional, красиво */
+}
+
+.events-modal-refresh-bar {
+  position: relative;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(109, 122, 151, 0.8);;
+}
+
+.events-modal-refresh-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -40%;
+  width: 40%;
+  height: 100%;
+  border-radius: 999px;
+  background: #3f4758;
+  animation: events-refresh-bar 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.events-modal-refresh-text {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 13px;
+  color: rgba(109, 122, 151, 0.8);
+}
+
+@keyframes events-refresh-bar {
+  0% {
+    left: -40%;
+  }
+  50% {
+    left: 60%;
+  }
+  100% {
+    left: 100%;
+  }
+}

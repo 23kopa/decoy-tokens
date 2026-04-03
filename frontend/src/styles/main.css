@@ -19,5 +19,6 @@
 @import "./components/pages.css";
 @import "./components/sections.css";
 @import "./components/components.css";
+@import "./components/events.css";
 
 @import "./utilities/scrollbar.css";

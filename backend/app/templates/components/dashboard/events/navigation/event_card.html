@@ -30,15 +30,19 @@
       </div>
     </div>
 
-    {# Статус с цветом #}
-    <span class="shrink-0 rounded-full px-2.5 py-1 text-2xs font-medium border"
-          :class="getEventStatusColor(event)"
-          x-text="event.is_first ? 'ПЕРВЫЙ' : (event.additional_data?.bot_info?.is_bot ? 'БОТ' : 'ПОВТОР')">
+    <span
+      class="shrink-0 rounded-full px-2.5 py-1 text-2xs font-medium border"
+      :class="isEventIpChanged(event)
+        ? 'border-amber-400/30 bg-amber-500/10 text-amber-300'
+        : getEventStatusColor(event)"
+      x-text="isEventIpChanged(event)
+        ? 'NEW IP'
+        : (event.is_first
+            ? 'ПЕРВЫЙ'
+            : (event.additional_data?.bot_info?.is_bot ? 'БОТ' : 'ПОВТОР'))">
     </span>
-
   </div>
 
-  {# User Agent с иконкой #}
   <div class="flex items-baseline gap-1 pt-2 mt-2 text-xs border-t border-gray-700/50">
     
     <span class="text-gray-500 shrink-0 leading-none">

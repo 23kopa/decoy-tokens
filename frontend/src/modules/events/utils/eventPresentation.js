@@ -20,10 +20,6 @@ export function formatEventIP(v) {
   return v || "—";
 }
 
-export function formatEventUserAgent(ua) {
-  return ua || "—";
-}
-
 export function getEventIcon(event) {
   if (event?.additional_data?.bot_info?.is_bot) return "🤖";
   if (event?.is_first) return "✨";
@@ -40,11 +36,23 @@ export function getEventStatusColor(event) {
   return "border-gray-700 text-gray-300";
 }
 
-export function getFlagEmoji(countryCode) {
-  if (!countryCode) return "🌍";
-  const codePoints = countryCode
-    .toUpperCase()
-    .split("")
-    .map((char) => 127397 + char.charCodeAt());
-  return String.fromCodePoint(...codePoints);
+export function getTimeAgo(timestamp) {
+  if (!timestamp) return '—';
+
+  const now = new Date();
+  const date = new Date(timestamp);
+  const diff = Math.floor((now - date) / 1000);
+
+  if (diff < 60) return `${diff} сек назад`;
+  if (diff < 3600) return `${Math.floor(diff / 60)} мин назад`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)} ч назад`;
+  if (diff < 604800) return `${Math.floor(diff / 86400)} д назад`;
+
+  return date.toLocaleDateString();
+}
+
+export function getEventWord(count) {
+  if (count % 10 === 1 && count % 100 !== 11) return 'событие';
+  if ([2, 3, 4].includes(count % 10) && ![12, 13, 14].includes(count % 100)) return 'события';
+  return 'событий';
 }

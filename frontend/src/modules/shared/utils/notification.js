@@ -6,17 +6,11 @@ export function notification() {
     notifications: [],
     
     // Максимальное количество уведомлений
-    maxNotifications: 5,
+    maxNotifications: 1,
     
     // Таймеры для автоматического скрытия
     timers: {},
 
-    /**
-     * Показать уведомление
-     * @param {string} message - текст уведомления
-     * @param {string} type - тип: 'success', 'error', 'info', 'warning'
-     * @param {number} duration - длительность показа (мс)
-     */
     show(message, type = 'info', duration = 3000) {
       const id = Date.now() + Math.random().toString(36).substr(2, 9);
       

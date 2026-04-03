@@ -42,7 +42,7 @@
 
     <div class="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
 
-      {# Левая часть #}
+      {# LEFT #}
       <div class="min-w-0 flex-1">
         <div class="flex min-w-0 items-center gap-2.5 sm:gap-3">
           <span class="relative flex h-2.5 w-2.5 shrink-0">
@@ -64,7 +64,6 @@
             {{ token.type }}
           </span>
 
-          {# Описание в строку только на sm+ #}
           <div class="hidden min-w-0 flex-1 sm:block">
             <div class="truncate text-sm"
                 :class="isActive ? 'text-gray-400' : 'text-gray-500'">
@@ -73,16 +72,16 @@
           </div>
         </div>
 
-        {# Описание отдельной строкой только на mobile #}
         <div class="mt-1.5 pl-5 text-sm sm:hidden">
           <div class="truncate"
               :class="isActive ? 'text-gray-400' : 'text-gray-500'">
             {{ token.desc or 'Без описания' }}
           </div>
         </div>
+        
       </div>
 
-      {# Правая часть #}
+      {# RIGHT #}
       <div class="flex items-center justify-between gap-3 pl-5 sm:shrink-0 sm:justify-end sm:pl-0">
         <div class="flex items-center gap-1.5 text-xs"
              :class="isActive ? 'text-gray-400' : 'text-gray-500'">

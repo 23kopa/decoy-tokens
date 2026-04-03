@@ -10,15 +10,23 @@
     {% include "partials/modals/events/header.html" %}
   </div>
 
-  <div x-show="!loading && events.length === 0"
-       class="flex-1 min-h-0">
-      {% include "partials/modals/events/empty.html" %}
-  </div>
+  <div class="relative flex-1 min-h-0 overflow-hidden">
 
-  <div x-show="loading || events.length > 0"
-       class="flex flex-1 min-h-0 min-w-0 flex-col gap-3 overflow-hidden lg:flex-row lg:gap-3">
+    <div x-show="!loading && events.length === 0"
+         :class="{ 'events-modal-content-blurred': refreshing && dataLoaded }"
+         class="flex-1 min-h-0 h-full">
+      {% include "partials/modals/events/states/empty.html" %}
+    </div>
+
+    <div x-show="loading || events.length > 0"
+         :class="{ 'events-modal-content-blurred': refreshing && dataLoaded }"
+         class="flex h-full min-h-0 min-w-0 flex-col gap-3 overflow-hidden lg:flex-row lg:gap-3">
       {% include "partials/modals/events/events.html" %}
       {% include "partials/modals/events/details.html" %}
+    </div>
+
+    {% include "partials/modals/events/states/refresh.html" %}
+
   </div>
 
   <div class="shrink-0">

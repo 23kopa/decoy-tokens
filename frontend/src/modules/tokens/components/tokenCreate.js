@@ -176,5 +176,6 @@ export function tokenCreate(tokenType, modalId, debug = false) {
     destroy() {
       this.stopProgress?.();
     },
+
   };
 }

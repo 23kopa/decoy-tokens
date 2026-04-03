@@ -72,7 +72,7 @@ dev-redis-ping:
 # --------------------
 # DEV FRONTEND
 # --------------------
-.PHONY: dev-front dev-front-build dev-front-install
+.PHONY: dev-front dev-front-build dev-front-install dev-front-logs
 
 dev-front:
 	cd $(FRONTEND) && npm run dev
@@ -83,6 +83,8 @@ dev-front-build:
 dev-front-install:
 	cd $(FRONTEND) && npm install
 
+dev-front-logs:
+	$(COMPOSE_DEV) logs -f frontend
 
 # --------------------
 # TESTS
