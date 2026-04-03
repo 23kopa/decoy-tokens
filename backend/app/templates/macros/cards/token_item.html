@@ -22,7 +22,10 @@
           syncStatus(e.detail.isActive);
         }
       });
-    ">
+    "
+    data-token-name="{{ (token.name or '')|lower }}"
+    data-token-type="{{ (token.type or '')|lower }}"
+    x-show="matchesToken($el)">
 
   <button type="button"
           class="group w-full rounded-2xl px-4 py-3 text-left transition-all duration-200"

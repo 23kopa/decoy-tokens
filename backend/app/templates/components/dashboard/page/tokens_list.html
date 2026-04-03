@@ -1,16 +1,64 @@
 {% import "macros/cards/token_item.html" as cards %}
 {% import "macros/icons/base.html" as icons %}
 
-<section class="flex flex-col min-h-0 section-base lg:flex-1" x-data>
+<section class="flex flex-col min-h-0 section-base lg:flex-1" x-data="tokensList()">
   
   <!-- Header -->
-  <div class="flex items-center justify-between pb-4 mb-5 border-b shrink-0 border-gray-700/40">
-      <div class="flex items-center gap-2">
-          <span class="text-lg font-semibold tracking-tight text-white">Созданные токены</span>
+  <div class="flex flex-col gap-3 pb-4 mb-5 border-b shrink-0 border-gray-700/40 lg:flex-row lg:items-center lg:justify-between">
+    
+    <div class="flex items-center gap-2">
+      <span class="text-lg font-semibold tracking-tight text-white">Созданные токены</span>
+    </div>
+
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+      
+      <div class="relative min-w-0 sm:w-44">
+        <input
+          x-model="search"
+          type="text"
+          placeholder="Поиск по имени..."
+          class="w-full rounded-lg border border-gray-700/50 bg-gray-800/0 px-3 py-2 text-sm text-white placeholder:text-gray-500 outline-none transition focus:border-gray-500 focus:bg-gray-900/50"
+        >
       </div>
-      <a href="/home" class="flex items-center gap-1 px-3 py-1.5 text-xs text-gray-400 transition border rounded-lg border-gray-700/50 hover:bg-gray-800 hover:text-white hover:border-gray-600">
-          <span>Создать</span>
+
+      <div class="relative w-28">
+        <select
+          x-model="selectedType"
+          class="block w-full rounded-lg border border-gray-700/50 bg-gray-800/0 px-3 py-2 text-sm text-gray-500 outline-none transition focus:border-gray-500 focus:bg-gray-900/50"
+          style="
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: none;
+          "
+        >
+          <option value="">Все типы</option>
+          <option value="email">Email</option>
+          <option value="link">Link</option>
+        </select>
+
+        <svg
+          class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
+
+      <a
+        href="/home"
+        class="inline-flex items-center justify-center rounded-lg border border-gray-700/50 px-3 py-3 text-gray-400 transition hover:bg-gray-800 hover:text-white hover:border-gray-600"
+        title="Создать токен"
+        aria-label="Создать токен"
+      >
+        <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
       </a>
+
+    </div>
   </div>
 
   <!-- Content -->
@@ -22,7 +70,6 @@
         <div class="max-h-[45vh] overflow-y-auto scrollbar-thin-dark lg:max-h-none lg:flex-1 lg:min-h-0">
           <ul class="p-3 space-y-3">
             {% for t in token_card %}
-              <!-- Убрали li с x-data и x-init - теперь всё внутри token_item -->
               {{ cards.token_item(t, loop.index) }}
             {% endfor %}
           </ul>
